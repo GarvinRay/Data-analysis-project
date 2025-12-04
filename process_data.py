@@ -8,6 +8,8 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import random
+from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean, pvariance
@@ -17,8 +19,10 @@ import pandas as pd
 
 
 DEFAULT_SOURCES: List[Tuple[str, int]] = [
-    ("openreview_oral_results_50.json", 1),
+    ("openreview_oral_results.json", 1),
     ("openreview_spotlight_results.json", 1),
+    ("openreview_poster_results.json", 1),
+    ("openreview_reject_results.json", 0),
 ]
 
 CLEAN_RE = re.compile(r"[^A-Za-z0-9 .,;:?!'\"()-]+")
@@ -40,15 +44,27 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--json-output",
-        default="meta_ac_dataset.json",
+        default="meta_ac_dataset_sampled.json",
         type=Path,
         help="Hierarchical JSON output path (default: %(default)s).",
     )
     parser.add_argument(
         "--csv-output",
-        default="meta_ac_stats.csv",
+        default="meta_ac_stats_sampled.csv",
         type=Path,
         help="Flat CSV output path (default: %(default)s).",
+    )
+    parser.add_argument(
+        "--total-samples",
+        type=int,
+        default=300,
+        help="Total number of papers to include after stratified sampling (default: %(default)s).",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed for sampling.",
     )
     return parser.parse_args()
 
@@ -153,7 +169,10 @@ class PaperRecord:
 
 
 def parse_paper(entry: Dict[str, Any], decision: int) -> Optional[PaperRecord]:
-    notes = entry.get("data", {}).get("notes", [])
+    if not isinstance(entry, dict):
+        return None
+    data_payload = entry.get("data") or {}
+    notes = data_payload.get("notes", [])
     if not notes:
         return None
     metadata_note = next(
@@ -323,11 +342,90 @@ def build_stats_dataframe(records: Iterable[PaperRecord]) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def infer_category(path: Path, label: int) -> str:
+    if label == 0:
+        return "reject"
+    name = path.name.lower()
+    if "oral" in name:
+        return "oral"
+    if "spotlight" in name:
+        return "spotlight"
+    if "poster" in name:
+        return "poster"
+    return "accept"
+
+
+def allocate_counts(group_counts: Dict[str, int], target_total: int) -> Dict[str, int]:
+    if target_total <= 0 or not group_counts:
+        return {key: 0 for key in group_counts}
+
+    total = sum(group_counts.values())
+    allocations: Dict[str, int] = {}
+    fractions: List[Tuple[float, str]] = []
+    assigned = 0
+    for category, count in group_counts.items():
+        if count == 0:
+            allocations[category] = 0
+            fractions.append((0.0, category))
+            continue
+        share = (count / total) * target_total
+        base = min(int(share), count)
+        allocations[category] = base
+        fractions.append((share - base, category))
+        assigned += base
+
+    remaining = min(target_total - assigned, target_total)
+    fractions.sort(reverse=True)
+    while remaining > 0:
+        updated = False
+        for _, category in fractions:
+            available = group_counts[category]
+            if allocations[category] < available:
+                allocations[category] += 1
+                remaining -= 1
+                updated = True
+                if remaining == 0:
+                    break
+        if not updated:
+            break
+    return allocations
+
+
+def stratified_sample(
+    records: List[Dict[str, Any]], total_samples: int, seed: int
+) -> List[Dict[str, Any]]:
+    rng = random.Random(seed)
+    accepts = [item for item in records if item["record"].decision == 1]
+    rejects = [item for item in records if item["record"].decision == 0]
+
+    target_accepts = min(len(accepts), total_samples // 2)
+    target_rejects = min(len(rejects), total_samples - target_accepts)
+
+    accept_groups: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    for item in accepts:
+        accept_groups[item["category"]].append(item)
+
+    group_counts = {k: len(v) for k, v in accept_groups.items()}
+    allocations = allocate_counts(group_counts, target_accepts)
+
+    sampled_accepts: List[Dict[str, Any]] = []
+    for category, count in allocations.items():
+        if count > 0 and len(accept_groups[category]) >= count:
+            sampled_accepts.extend(rng.sample(accept_groups[category], count))
+
+    sampled_rejects = (
+        rng.sample(rejects, target_rejects) if target_rejects > 0 else []
+    )
+
+    selected = sampled_accepts + sampled_rejects
+    return selected
+
+
 def main() -> None:
     args = parse_args()
     sources = load_sources(args)
 
-    processed_records: List[PaperRecord] = []
+    records_with_meta: List[Dict[str, Any]] = []
     for path, label in sources:
         if not path.exists():
             raise FileNotFoundError(f"Input file {path} not found.")
@@ -336,13 +434,35 @@ def main() -> None:
         for entry in payload:
             record = parse_paper(entry, label)
             if record:
-                processed_records.append(record)
+                records_with_meta.append(
+                    {
+                        "record": record,
+                        "category": infer_category(path, label),
+                    }
+                )
 
-    json_records = [record_to_dict(record) for record in processed_records]
+    sampled = stratified_sample(
+        records_with_meta, args.total_samples, seed=args.seed
+    )
+    sampled_records = [item["record"] for item in sampled]
+
+    count_summary = Counter(item["category"] for item in sampled)
+    display_names = {
+        "oral": "Oral",
+        "spotlight": "Spotlight",
+        "poster": "Poster",
+        "reject": "Reject",
+    }
+    summary_parts = []
+    for key in ("oral", "spotlight", "poster", "reject"):
+        summary_parts.append(f"{count_summary.get(key, 0)} {display_names[key]}")
+    print("Selected: " + ", ".join(summary_parts))
+
+    json_records = [record_to_dict(record) for record in sampled_records]
     with args.json_output.open("w", encoding="utf-8") as outfile:
         json.dump(json_records, outfile, ensure_ascii=False, indent=2)
 
-    stats_df = build_stats_dataframe(processed_records)
+    stats_df = build_stats_dataframe(sampled_records)
     stats_df.to_csv(args.csv_output, index=False)
 
     print(

@@ -1,6 +1,6 @@
 title,raw_avg,variance,final_prob,decision
-DarkBench: Benchmarking Dark Patterns in Large Language Models,7.0,1.0,0.7258846169945872,1
-RM-Bench: Benchmarking Reward Models of Language Models with Subtlety and Style,8.0,0.0,0.6736074539132183,1
-TopoLM: brain-like spatio-functional organization in a topographic language model,8.0,0.0,0.8205092719689839,1
-Spider 2.0: Evaluating Language Models on Real-World Enterprise Text-to-SQL Workflows,8.0,0.0,0.7640788101707774,1
-Knowledge Entropy Decay during Language Model Pretraining Hinders New Knowledge Acquisition,7.25,1.6875,0.5029120717606774,1
+DarkBench: Benchmarking Dark Patterns in Large Language Models,7.0,1.0,0.652186814566789,1
+RM-Bench: Benchmarking Reward Models of Language Models with Subtlety and Style,8.0,0.0,0.6116635319256156,1
+TopoLM: brain-like spatio-functional organization in a topographic language model,8.0,0.0,0.7375793759734147,1
+Spider 2.0: Evaluating Language Models on Real-World Enterprise Text-to-SQL Workflows,8.0,0.0,0.6892104087178091,1
+Knowledge Entropy Decay during Language Model Pretraining Hinders New Knowledge Acquisition,7.25,1.6875,0.4620532043662949,1

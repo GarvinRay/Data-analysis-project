@@ -11,12 +11,13 @@ from pathlib import Path
 from typing import Any, Dict, List, Sequence, Tuple
 
 import pandas as pd
+from tqdm import tqdm
 
 from agents import ArgumentAgent, BayesianAgent, MetaAC
 
 
-CSV_PATH = Path("meta_ac_stats.csv")
-JSON_PATH = Path("meta_ac_dataset.json")
+CSV_PATH = Path("meta_ac_stats_sampled.csv")
+JSON_PATH = Path("meta_ac_dataset_sampled.json")
 
 
 def load_data_frame(path: Path) -> pd.DataFrame:
@@ -124,38 +125,43 @@ def main() -> None:
     use_live_llm = bool(os.environ.get("DEEPSEEK_API_KEY"))
     results_buffer: List[Dict[str, Any]] = []
 
-    for row, record in merged[:5]:
-        pairs = record.get("review_rebuttal_pairs") or []
-        first_pair = pairs[0] if pairs else {}
-        if first_pair:
-            if use_live_llm and hasattr(arg, "analyze_pair"):
-                text_result = arg.analyze_pair(first_pair)
+    for row, record in tqdm(merged, desc="Processing papers", unit="paper"):
+        try:
+            pairs = record.get("review_rebuttal_pairs") or []
+            first_pair = pairs[0] if pairs else {}
+            if first_pair:
+                if use_live_llm and hasattr(arg, "analyze_pair"):
+                    text_result = arg.analyze_pair(first_pair)
+                else:
+                    text_result = arg.mock_analysis(first_pair)
             else:
-                text_result = arg.mock_analysis(first_pair)
-        else:
-            text_result = {"resolved": False, "sentiment_change": 0.0}
+                text_result = {"resolved": False, "sentiment_change": 0.0}
 
-        meta_result = meta.predict(row, text_result)
-        display_report(row, record, text_result, meta_result)
+            meta_result = meta.predict(row, text_result)
+            display_report(row, record, text_result, meta_result)
 
-        decision_value = row.get("decision")
-        if pd.isna(decision_value):
-            decision_value = record.get("decision")
-        results_buffer.append(
-            {
-                "title": record.get("title"),
-                "raw_avg": row.get("avg_rating"),
-                "variance": row.get("rating_variance"),
-                "final_prob": meta_result["final_probability"],
-                "decision": decision_value,
-            }
-        )
+            decision_value = row.get("decision")
+            if pd.isna(decision_value):
+                decision_value = record.get("decision")
+            results_buffer.append(
+                {
+                    "title": record.get("title"),
+                    "raw_avg": row.get("avg_rating"),
+                    "variance": row.get("rating_variance"),
+                    "final_prob": meta_result["final_probability"],
+                    "decision": decision_value,
+                }
+            )
+        except Exception as exc:
+            title = record.get("title") or record.get("paper_id")
+            print(f"Error processing '{title}': {exc}")
+            continue
 
     summarize_by_decision(results_buffer)
 
     if results_buffer:
-        pd.DataFrame(results_buffer).to_csv("meta_ac_predictions.csv", index=False)
-        print("Saved predictions to meta_ac_predictions.csv")
+        pd.DataFrame(results_buffer).to_csv("final_predictions.csv", index=False)
+        print("Saved predictions to final_predictions.csv")
 
 
 if __name__ == "__main__":

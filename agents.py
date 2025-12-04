@@ -8,7 +8,7 @@ from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Sequence
+from typing import Any, Dict, List, Sequence, Tuple
 
 import numpy as np
 import requests
@@ -35,7 +35,9 @@ class BayesianAgent:
     low_reliability: float = 0.4
     high_reliability: float = 0.9
 
-    def get_reliability_score(self, row: Dict[str, Any] | Any) -> float:
+    def get_reliability_score(
+        self, row: Dict[str, Any] | Any, return_details: bool = False
+    ) -> float | Tuple[float, str]:
         """
         Return a reliability scalar using heuristics on count/variance.
         """
@@ -43,10 +45,19 @@ class BayesianAgent:
         variance = self._safe_float(row.get("rating_variance"))
 
         if num_reviews is None or num_reviews < self.min_reviews:
-            return self.low_reliability
-        if variance is not None and variance > self.max_variance:
-            return self.low_reliability
-        return self.high_reliability
+            base = self.low_reliability
+        elif variance is not None and variance > self.max_variance:
+            base = self.low_reliability
+        else:
+            base = self.high_reliability
+
+        review_text = self._extract_review_text(row)
+        profile_weight, profile_reason = self.profile_reviewer(review_text)
+        reliability = base * profile_weight
+
+        if return_details:
+            return reliability, profile_reason
+        return reliability
 
     def calibrate_score(self, row: Dict[str, Any] | Any) -> float:
         """
@@ -77,6 +88,45 @@ class BayesianAgent:
             return float(value)
         except (TypeError, ValueError):
             return None
+
+    def profile_reviewer(self, review_text: str | None) -> Tuple[float, str]:
+        """
+        Infer reviewer persona based on textual clues.
+        """
+        if not review_text:
+            return 1.0, "standard reviewer"
+
+        words = review_text.strip().split()
+        lower_text = review_text.lower()
+        if len(words) < 50:
+            return 0.5, "lazy reviewer penalty"
+
+        nitpick_terms = ("typo", "formatting", "font", "missing citation")
+        core_terms = ("method", "experiment", "novelty", "result", "theory")
+        if any(term in lower_text for term in nitpick_terms) and not any(
+            term in lower_text for term in core_terms
+        ):
+            return 0.8, "nitpicker focus penalty"
+        return 1.0, "balanced reviewer"
+
+    @staticmethod
+    def _extract_review_text(row: Dict[str, Any] | Any) -> str | None:
+        if hasattr(row, "get"):
+            text = row.get("review_text")
+            if text:
+                return text
+            pairs = row.get("review_rebuttal_pairs")
+            if pairs:
+                sample = pairs[0]
+                if isinstance(sample, dict):
+                    return sample.get("review_text")
+        if isinstance(row, dict):
+            pairs = row.get("review_rebuttal_pairs")
+            if pairs:
+                sample = pairs[0]
+                if isinstance(sample, dict):
+                    return sample.get("review_text")
+        return None
 
 
 @dataclass
@@ -126,32 +176,46 @@ class ArgumentAgent:
         Call the DeepSeek API when credentials are configured, otherwise mock.
         """
         if not self.api_key:
-            return self.mock_analysis(pair)
+            base_result = self.mock_analysis(pair)
+        else:
+            payload = {
+                "model": self.model_name,
+                "messages": self.construct_llm_messages(pair),
+                "temperature": 0.2,
+            }
+            headers = {
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            }
 
-        payload = {
-            "model": self.model_name,
-            "messages": self.construct_llm_messages(pair),
-            "temperature": 0.2,
-        }
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json",
-        }
+            try:
+                response = requests.post(
+                    self.api_url, headers=headers, json=payload, timeout=60
+                )
+                response.raise_for_status()
+                data = response.json()
+                choices = data.get("choices") or []
+                if not choices:
+                    raise ValueError("No choices returned from DeepSeek.")
+                content = choices[0].get("message", {}).get("content", "")
+            except Exception:
+                base_result = self.mock_analysis(pair)
+            else:
+                base_result = self._parse_llm_response(content)
 
-        try:
-            response = requests.post(
-                self.api_url, headers=headers, json=payload, timeout=60
-            )
-            response.raise_for_status()
-            data = response.json()
-            choices = data.get("choices") or []
-            if not choices:
-                raise ValueError("No choices returned from DeepSeek.")
-            content = choices[0].get("message", {}).get("content", "")
-            return self._parse_llm_response(content)
-        except Exception:
-            # Fall back to a deterministic mock result if the remote call fails.
-            return self.mock_analysis(pair)
+        debate = self.simulate_debate(pair)
+        total_sentiment = float(base_result.get("sentiment_change", 0.0)) + float(
+            debate.get("adjustment", 0.0)
+        )
+        base_result.update(
+            {
+                "sentiment_change": total_sentiment,
+                "debate_adjustment": debate.get("adjustment", 0.0),
+                "debate_verdict": debate.get("verdict"),
+                "debate_comment": debate.get("comment"),
+            }
+        )
+        return base_result
 
     @staticmethod
     def _parse_llm_response(content: str) -> Dict[str, Any]:
@@ -177,6 +241,69 @@ class ArgumentAgent:
             except json.JSONDecodeError:
                 pass
         return {"resolved": False, "sentiment_change": 0.0}
+
+    def simulate_debate(self, pair: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Run a counterfactual 'devil's advocate' pass on the rebuttal.
+        """
+        if not pair:
+            return {"verdict": "UNKNOWN", "adjustment": 0.0, "comment": None}
+
+        review = pair.get("review_text", "")
+        rebuttal = pair.get("rebuttal_text", "")
+        system_prompt = (
+            "You are a seasoned Area Chair acting as a devil's advocate. "
+            "Read the reviewer concern and the author's rebuttal. "
+            "If you can find a logical flaw, missing evidence, or unresolved issue, "
+            "state it in one sentence. If the rebuttal is solid, respond with 'SOLID'."
+        )
+        user_content = (
+            "Reviewer Concern:\n"
+            f"{review}\n\n"
+            "Author Rebuttal:\n"
+            f"{rebuttal or 'No rebuttal provided.'}"
+        )
+
+        if not self.api_key:
+            return self._mock_debate(review, rebuttal)
+
+        payload = {
+            "model": self.model_name,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_content},
+            ],
+            "temperature": 0.2,
+        }
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+        }
+        try:
+            response = requests.post(
+                self.api_url, headers=headers, json=payload, timeout=60
+            )
+            response.raise_for_status()
+            content = response.json().get("choices", [{}])[0].get("message", {}).get(
+                "content", ""
+            )
+            verdict = content.strip() if content else "UNKNOWN"
+        except Exception:
+            return self._mock_debate(review, rebuttal)
+
+        verdict_upper = verdict.strip().upper()
+        if verdict_upper.startswith("SOLID"):
+            return {"verdict": "SOLID", "adjustment": 0.2, "comment": verdict}
+        return {"verdict": "FLAW", "adjustment": -0.3, "comment": verdict}
+
+    def _mock_debate(self, review: str, rebuttal: str) -> Dict[str, Any]:
+        if rebuttal and self.random_state.random() > 0.4:
+            return {"verdict": "SOLID", "adjustment": 0.2, "comment": "SOLID"}
+        return {
+            "verdict": "FLAW",
+            "adjustment": -0.3,
+            "comment": "Potential gap identified in rebuttal.",
+        }
 
 
 @dataclass
@@ -261,11 +388,15 @@ class MetaAC:
         and the sentiment delta (mapped from [-1, 1] to [0, 1]).
         """
         calibrated_score = self.bayes_agent.calibrate_score(paper_data)
-        reliability = self.bayes_agent.get_reliability_score(paper_data)
+        reliability, profile_reason = self.bayes_agent.get_reliability_score(
+            paper_data, return_details=True
+        )
         normalized_score = np.clip(calibrated_score / 10.0, 0.0, 1.0)
 
         sentiment = float(text_analysis_result.get("sentiment_change", 0.0))
+        sentiment += float(text_analysis_result.get("debate_adjustment", 0.0))
         sentiment_score = np.clip((sentiment + 1.0) / 2.0, 0.0, 1.0)
+        debate_verdict = text_analysis_result.get("debate_verdict")
 
         novelty_bonus = 0.0
         if self.domain_agent:
@@ -282,11 +413,17 @@ class MetaAC:
                 1.0,
             )
         )
+        debate_phrase = ""
+        if debate_verdict:
+            if debate_verdict == "SOLID":
+                debate_phrase = "Simulation confirmed rebuttal solidity."
+            else:
+                debate_phrase = "Simulation flagged rebuttal weakness."
+
         reasoning = (
-            f"Calibrated score={calibrated_score:.2f} (reliability {reliability:.2f}), "
-            f"sentiment contribution={sentiment_score:.2f}, "
-            f"novelty bonus={novelty_bonus:.2f}. "
-            "Higher reliability pushes the decision toward quantitative evidence."
+            f"Calibrated score={calibrated_score:.2f} (reliability {reliability:.2f}; "
+            f"{profile_reason}), sentiment contribution={sentiment_score:.2f}, "
+            f"novelty bonus={novelty_bonus:.2f}. {debate_phrase}"
         )
         return {
             "final_probability": final_probability,
