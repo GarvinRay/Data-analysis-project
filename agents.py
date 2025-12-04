@@ -13,6 +13,11 @@ from typing import Any, Dict, List, Sequence
 import numpy as np
 import requests
 
+try:
+    from sentence_transformers import SentenceTransformer
+except ImportError:  # pragma: no cover - optional dependency
+    SentenceTransformer = None  # type: ignore
+
 
 @dataclass
 class BayesianAgent:
@@ -175,6 +180,65 @@ class ArgumentAgent:
 
 
 @dataclass
+class DomainAgent:
+    """
+    Domain expert that judges novelty via embedding density.
+    """
+
+    abstracts: Sequence[str]
+    model_name: str = "all-MiniLM-L6-v2"
+
+    def __post_init__(self) -> None:
+        if SentenceTransformer is None:
+            raise ImportError(
+                "sentence_transformers is required for DomainAgent. "
+                "Install it via `pip install sentence-transformers`."
+            )
+        self.model = SentenceTransformer(self.model_name)
+        self.corpus_embeddings = self.model.encode(
+            list(self.abstracts), convert_to_numpy=True
+        )
+
+    def analyze_novelty(self, target_abstract: str | None) -> Dict[str, float]:
+        """
+        Measure local density and novelty against the abstract corpus.
+        """
+        if not target_abstract:
+            return {"density_score": 0.0, "novelty_score": 0.0}
+
+        target_embedding = self.model.encode(target_abstract, convert_to_numpy=True)
+        similarities = self._cosine_similarity(target_embedding, self.corpus_embeddings)
+
+        # Exclude self similarity by ignoring the maximum value.
+        density = float(np.sum(similarities > 0.8))
+
+        sorted_sim = np.sort(similarities)[::-1]
+        top_neighbors = sorted_sim[1:6]  # skip the paper itself
+        if top_neighbors.size == 0:
+            novelty = 1.0
+        else:
+            distances = 1.0 - top_neighbors
+            novelty = float(np.mean(distances))
+
+        return {
+            "density_score": density,
+            "novelty_score": novelty,
+        }
+
+    @staticmethod
+    def _cosine_similarity(vec: np.ndarray, matrix: np.ndarray) -> np.ndarray:
+        vec_norm = np.linalg.norm(vec)
+        matrix_norms = np.linalg.norm(matrix, axis=1)
+        # Avoid division by zero
+        valid = (vec_norm > 0) & (matrix_norms > 0)
+        sims = np.zeros(len(matrix))
+        if not valid.any():
+            return sims
+        sims[valid] = np.dot(matrix[valid], vec) / (matrix_norms[valid] * vec_norm)
+        return sims
+
+
+@dataclass
 class MetaAC:
     """
     Orchestrator that fuses Bayesian and argumentation signals.
@@ -182,6 +246,7 @@ class MetaAC:
 
     bayes_agent: BayesianAgent
     argument_agent: ArgumentAgent
+    domain_agent: DomainAgent | None = None
 
     def predict(
         self,
@@ -202,12 +267,29 @@ class MetaAC:
         sentiment = float(text_analysis_result.get("sentiment_change", 0.0))
         sentiment_score = np.clip((sentiment + 1.0) / 2.0, 0.0, 1.0)
 
+        novelty_bonus = 0.0
+        if self.domain_agent:
+            abstract = paper_data.get("abstract_clean") or paper_data.get("abstract")
+            domain_stats = self.domain_agent.analyze_novelty(abstract)
+            novelty_bonus = np.clip(domain_stats["novelty_score"], 0.0, 1.0) * 0.05
+        else:
+            domain_stats = {"density_score": None, "novelty_score": None}
+
         final_probability = float(
-            np.clip((0.65 * normalized_score) + (0.35 * sentiment_score), 0.0, 1.0)
+            np.clip(
+                (0.6 * normalized_score) + (0.3 * sentiment_score) + novelty_bonus,
+                0.0,
+                1.0,
+            )
         )
         reasoning = (
             f"Calibrated score={calibrated_score:.2f} (reliability {reliability:.2f}), "
-            f"sentiment contribution={sentiment_score:.2f}. "
+            f"sentiment contribution={sentiment_score:.2f}, "
+            f"novelty bonus={novelty_bonus:.2f}. "
             "Higher reliability pushes the decision toward quantitative evidence."
         )
-        return {"final_probability": final_probability, "reasoning": reasoning}
+        return {
+            "final_probability": final_probability,
+            "reasoning": reasoning,
+            "domain": domain_stats,
+        }
