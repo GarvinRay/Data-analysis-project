@@ -1,44 +1,28 @@
 #!/usr/bin/env python3
 """
-Entry point for running the Meta-AC pipeline on real data.
+Train and evaluate an MLP classifier for Meta-AC acceptance prediction.
+Features are extracted via agents.BayesianAgent and agents.ArgumentAgent.
 """
 
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
 from typing import Any, Dict, List, Sequence, Tuple
 
+import numpy as np
 import pandas as pd
-import requests
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import StandardScaler
 from tqdm import tqdm
 
+from agents import ArgumentAgent, BayesianAgent
 from meta_ac.models import PaperRecord
 
 CSV_PATH = Path("meta_ac_stats_sampled.csv")
 JSON_PATH = Path("meta_ac_dataset_sampled.json")
-DEEPSEEK_BASEURL = "https://api.deepseek.com/v1/chat/completions"
-LLM_PROMPT = """
-You are a strict and experienced Area Chair (AC) for ICLR. 
-Your task is to evaluate the "effectiveness" of an Author's Rebuttal to a Reviewer's criticism.
-
-Input data includes:
-1. Reviewer's specific concern.
-2. Author's rebuttal.
-
-Please analyze:
-1. **Responsiveness**: Did the author directly answer the question? (Avoid dodging)
-2. **Evidence**: Did the author provide new experiments, citations, or theoretical proofs?
-3. **Attitude**: Is the tone professional and constructive?
-
-Output JSON format ONLY:
-{
-    "reasoning": "A short summary of why the rebuttal is strong or weak...",
-    "rebuttal_score": <float between 0.0 and 1.0, where 0.0 is completely ignored/failed, 0.5 is partial, 1.0 is perfectly resolved>
-}
-"""
 
 
 def load_data_frame(path: Path) -> pd.DataFrame:
@@ -58,14 +42,11 @@ def load_json_records(path: Path) -> List[PaperRecord]:
 def merge_sources(
     df: pd.DataFrame, records: Sequence[PaperRecord]
 ) -> List[Tuple[pd.Series, PaperRecord]]:
-    """
-    Align CSV rows with JSON records using paper_id; fall back to index order.
-    """
-    record_lookup = {record.paper_id: record for record in records if record.paper_id}
+    lookup = {rec.paper_id: rec for rec in records if rec.paper_id}
     merged: List[Tuple[pd.Series, PaperRecord]] = []
     for idx, row in df.iterrows():
         paper_id = row.get("paper_id")
-        record = record_lookup.get(paper_id)
+        record = lookup.get(paper_id)
         if record is None and idx < len(records):
             record = records[idx]
         if record is None:
@@ -74,59 +55,88 @@ def merge_sources(
     return merged
 
 
-def display_report(
-    row: pd.Series, record: PaperRecord, llm_score: float, prob: float
-) -> None:
-    title = record.title or f"Paper {record.paper_id}"
-    decision_value = row.get("decision")
-    if pd.isna(decision_value):
-        decision_value = record.decision
-    decision_label = _format_decision(decision_value)
-    avg_rating = row.get("avg_rating", "N/A")
-    print(f"=== Paper: {title} ===")
-    print(f"Decision: {decision_label}")
-    print(f"Raw Avg Rating: {avg_rating}")
-    print(f"LLM Rebuttal Score: {llm_score:.2f}")
-    print(f"MLP Predicted Probability: {prob:.2f}")
-    print("-" * 50)
-
-
-def _format_decision(value) -> str:
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return "Unknown"
+def extract_rebuttal_score(arg_agent: ArgumentAgent, record: PaperRecord) -> float:
+    """
+    Use ArgumentAgent to score rebuttal quality; return a score in [0, 1].
+    """
+    pairs = record.review_rebuttal_pairs
+    if not pairs:
+        return 0.5  # neutral default
+    first_pair = pairs[0].to_dict()
     try:
-        num = float(value)
-        if num >= 0.5:
-            return "Accept"
-        return "Reject"
-    except (TypeError, ValueError):
-        lowered = str(value).lower()
-        if "oral" in lowered or "spotlight" in lowered or "accept" in lowered:
-            return "Accept"
-        if "reject" in lowered:
-            return "Reject"
-        return str(value)
+        result = arg_agent.analyze_pair(first_pair)
+        sentiment = float(result.get("sentiment_change", 0.0))
+        # include debate adjustment if present
+        sentiment += float(result.get("debate_adjustment", 0.0))
+        score = float(np.clip((sentiment + 1.0) / 2.0, 0.0, 1.0))
+        return score
+    except Exception:
+        return 0.5
 
 
-def summarize_by_decision(results: Sequence[Dict[str, Any]]) -> None:
-    if not results:
-        print("No results available for summary.")
-        return
-    df = pd.DataFrame(results)
-    if "decision" not in df.columns:
-        print("Decision column missing; skipping summary.")
-        return
-    summary = (
-        df.dropna(subset=["decision"])
-        .groupby("decision")["final_prob"]
-        .mean()
-        .to_dict()
+def extract_features_and_labels(
+    merged: Sequence[Tuple[pd.Series, PaperRecord]],
+    bayes: BayesianAgent,
+    arg: ArgumentAgent,
+) -> Tuple[np.ndarray, np.ndarray, List[str]]:
+    X: List[List[float]] = []
+    y: List[int] = []
+    ids: List[str] = []
+
+    for row, record in tqdm(merged, desc="Extracting features", unit="paper"):
+        try:
+            avg_rating = _safe_float(row.get("avg_rating")) or 0.0
+            variance = _safe_float(row.get("rating_variance")) or 0.0
+            num_reviews = _safe_float(row.get("num_reviews")) or 0.0
+            conf_avg = _safe_float(row.get("confidence_weighted_avg")) or 0.0
+            calibrated = bayes.calibrate_score(row)
+            rebuttal_score = extract_rebuttal_score(arg, record)
+
+            decision_value = row.get("decision")
+            if pd.isna(decision_value):
+                decision_value = record.decision
+
+            X.append([avg_rating, variance, calibrated, rebuttal_score])
+            y.append(int(decision_value))
+            ids.append(record.paper_id or f"idx_{len(ids)}")
+        except Exception:
+            # Skip problematic records but continue overall pipeline
+            continue
+
+    return np.array(X, dtype=float), np.array(y, dtype=int), ids
+
+
+def train_and_evaluate(
+    X: np.ndarray, y: np.ndarray, ids: List[str]
+) -> Tuple[MLPClassifier, StandardScaler, np.ndarray]:
+    indices = np.arange(len(y))
+    X_train, X_test, y_train, y_test, idx_train, idx_test = train_test_split(
+        X, y, indices, test_size=0.2, random_state=42, stratify=y
     )
-    if not summary:
-        print("No decision labels available for summary.")
-        return
-    for decision, avg in summary.items():
-        print(f"Average Meta-AC probability for decision '{decision}': {avg:.2f}")
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+
+    clf = MLPClassifier(
+        hidden_layer_sizes=(16, 8),
+        activation="relu",
+        solver="adam",
+        random_state=42,
+        max_iter=500,
+    )
+    clf.fit(X_train_scaled, y_train)
+    y_pred = clf.predict(X_test_scaled)
+
+    print(f"Accuracy: {accuracy_score(y_test, y_pred):.3f}")
+    print("Classification Report:")
+    print(classification_report(y_test, y_pred, digits=3))
+
+    mis_idx = [ids[i] for i, y_p, y_t in zip(idx_test, y_pred, y_test) if y_p != y_t]
+    if mis_idx:
+        print("Misclassified paper_ids (test set):", mis_idx)
+
+    probs_all = clf.predict_proba(scaler.transform(X))[:, 1]
+    return clf, scaler, probs_all
 
 
 def main() -> None:
@@ -136,115 +146,23 @@ def main() -> None:
     if not merged:
         raise RuntimeError("No merged records were available.")
 
-    api_key = os.environ.get("DEEPSEEK_API_KEY")
-    results_buffer: List[Dict[str, Any]] = []
-    feature_rows: List[List[float]] = []
-    labels: List[int] = []
-    llm_scores: List[float] = []
+    bayes = BayesianAgent()
+    arg = ArgumentAgent()
 
-    for row, record in tqdm(merged, desc="Processing papers", unit="paper"):
-        try:
-            pairs = [pair.to_dict() for pair in record.review_rebuttal_pairs]
-            first_pair = pairs[0] if pairs else {}
-            llm_score = 0.0
-            if first_pair:
-                review_text = first_pair.get("review_text") or ""
-                rebuttal_text = first_pair.get("rebuttal_text") or ""
-                llm_score = call_deepseek(review_text, rebuttal_text, api_key)
-            llm_scores.append(llm_score)
+    X, y, ids = extract_features_and_labels(merged, bayes, arg)
+    if X.size == 0:
+        raise RuntimeError("No features extracted; aborting.")
 
-            decision_value = row.get("decision")
-            if pd.isna(decision_value):
-                decision_value = record.decision
-            labels.append(int(decision_value))
+    model, scaler, probs = train_and_evaluate(X, y, ids)
 
-            avg_rating = _safe_float(row.get("avg_rating")) or 0.0
-            variance = _safe_float(row.get("rating_variance")) or 0.0
-            num_reviews = _safe_float(row.get("num_reviews")) or 0.0
-            conf_avg = _safe_float(row.get("confidence_weighted_avg")) or 0.0
-            feature_rows.append([
-                avg_rating,
-                variance,
-                num_reviews,
-                conf_avg,
-                llm_score,
-            ])
-
-            results_buffer.append({
-                "title": record.title,
-                "raw_avg": row.get("avg_rating"),
-                "variance": row.get("rating_variance"),
-                "llm_score": llm_score,
-                "decision": decision_value,
-            })
-        except Exception as exc:
-            title = record.title or record.paper_id
-            print(f"Error processing '{title}': {exc}")
-            continue
-
-    if not feature_rows:
-        raise RuntimeError("No features collected; aborting.")
-
-    clf = MLPClassifier(
-        hidden_layer_sizes=(16, 8),
-        activation="relu",
-        solver="adam",
-        random_state=42,
-        max_iter=500,
-    )
-    clf.fit(feature_rows, labels)
-    probs = clf.predict_proba(feature_rows)[:, 1]
-
-    # Display reports with probabilities
-    for (row, record), prob, llm_score in zip(merged, probs, llm_scores):
-        display_report(row, record, llm_score, prob)
-
-    # Attach probabilities and save
-    for entry, prob in zip(results_buffer, probs):
-        entry["final_prob"] = prob
-
-    summarize_by_decision(results_buffer)
-
-    if results_buffer:
-        pd.DataFrame(results_buffer).to_csv("final_predictions.csv", index=False)
-        print("Saved predictions to final_predictions.csv")
-
-
-def call_deepseek(review_text: str, rebuttal_text: str, api_key: str | None) -> float:
-    """
-    Call DeepSeek API to score rebuttal quality (0-1). Returns 0.0 on failure.
-    """
-    if not api_key:
-        return 0.0
-    payload = {
-        "model": "deepseek-chat",
-        "messages": [
-            {"role": "system", "content": LLM_PROMPT},
-            {
-                "role": "user",
-                "content": f"评审意见:\n{review_text}\n\n作者回复:\n{rebuttal_text}",
-            },
-        ],
-        "temperature": 0.2,
-    }
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-    }
-    try:
-        resp = requests.post(
-            DEEPSEEK_BASEURL, headers=headers, json=payload, timeout=60
-        )
-        resp.raise_for_status()
-        content = (
-            resp.json().get("choices", [{}])[0].get("message", {}).get("content", "")
-        )
-        score = float(content.strip())
-        if 0.0 <= score <= 1.0:
-            return score
-    except Exception:
-        return 0.0
-    return 0.0
+    # Attach probabilities to paper ids for inspection
+    results = pd.DataFrame({
+        "paper_id": ids,
+        "probability": probs,
+        "label": y,
+    })
+    results.to_csv("final_predictions.csv", index=False)
+    print("Saved predictions to final_predictions.csv")
 
 
 def _safe_float(value: Any) -> float | None:

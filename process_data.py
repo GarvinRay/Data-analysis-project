@@ -388,9 +388,9 @@ def stratified_sample(
     sampled_accepts: List[CategorizedRecord] = []
     for category, count in allocations.items():
         if count > 0 and len(accept_groups[category]) >= count:
-            sampled_accepts.extend(rng.sample(accept_groups[category], count))
+            sampled_accepts.extend(accept_groups[category][:count])
 
-    sampled_rejects = rng.sample(rejects, target_rejects) if target_rejects > 0 else []
+    sampled_rejects = rejects[:target_rejects] if target_rejects > 0 else []
 
     selected = sampled_accepts + sampled_rejects
     return selected
