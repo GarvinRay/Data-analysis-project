@@ -11,26 +11,49 @@ import plotly.express as px
 import streamlit as st
 
 from agents import BayesianAgent
-
-STATS_PATH = "meta_ac_stats.csv"
-PREDICTIONS_PATH = "meta_ac_predictions.csv"
+from meta_ac.config import PREDICTIONS_PATH, STATS_PATH
 
 
 @st.cache_data
 def load_data() -> pd.DataFrame:
-    stats_df = pd.read_csv(STATS_PATH)
-    preds_df = pd.read_csv(PREDICTIONS_PATH)
-    if "paper_id" not in preds_df.columns:
+    stats_path = STATS_PATH if STATS_PATH.exists() else Path(STATS_PATH.name)
+    preds_path = PREDICTIONS_PATH if PREDICTIONS_PATH.exists() else Path(PREDICTIONS_PATH.name)
+
+    if not stats_path.exists():
+        raise FileNotFoundError(f"Stats file not found: {stats_path}")
+    if not preds_path.exists():
+        raise FileNotFoundError(f"Predictions file not found: {preds_path}")
+
+    stats_df = pd.read_csv(stats_path)
+    preds_df = pd.read_csv(preds_path)
+
+    # Normalize column names
+    stats_df = stats_df.rename(columns={"avg_rating": "raw_avg", "rating_variance": "variance"})
+    preds_df = preds_df.rename(columns={"probability": "final_prob"})
+
+    # Attach title if missing
+    if "title" not in preds_df.columns and "paper_id" in stats_df.columns:
+        preds_df = preds_df.merge(stats_df[["paper_id", "decision"]], on="paper_id", how="left")
+        preds_df["title"] = preds_df["paper_id"]
+
+    if "paper_id" not in preds_df.columns and "paper_id" in stats_df.columns:
         preds_df = preds_df.copy()
         preds_df["paper_id"] = stats_df.loc[: len(preds_df) - 1, "paper_id"].values
+
     merged = stats_df.merge(preds_df, on="paper_id", how="inner")
 
     bayes = BayesianAgent()
     merged["reliability"] = merged.apply(bayes.get_reliability_score, axis=1)
     merged["raw_score_norm"] = merged["raw_avg"] / 10.0
     if "sentiment_score" not in merged.columns:
-        merged["sentiment_score"] = merged["final_prob"]
+        merged["sentiment_score"] = merged.get("final_prob", 0.0)
     merged["sentiment_score"] = np.clip(merged["sentiment_score"].astype(float), 0.0, 1.0)
+
+    # Backfill title if missing
+    if "title" not in merged.columns:
+        merged["title"] = merged["paper_id"]
+    if "rating_variance" not in merged.columns and "variance" in merged.columns:
+        merged["rating_variance"] = merged["variance"]
     return merged
 
 
@@ -58,7 +81,15 @@ def main() -> None:
     st.set_page_config(page_title="Meta-AC Dashboard", layout="wide")
     st.title("Meta-AC Paper Explorer")
 
-    df = load_data()
+    try:
+        df = load_data()
+    except Exception as exc:
+        st.error(f"Failed to load data: {exc}")
+        return
+    if "title" not in df.columns:
+        # Fallback: use paper_id as title if missing
+        df["title"] = df["paper_id"]
+
     title_to_row = {row["title"]: row for _, row in df.iterrows()}
     selection = st.sidebar.selectbox(
         "Select a paper", options=list(title_to_row.keys())
@@ -72,7 +103,7 @@ def main() -> None:
     with col1:
         st.write("**Raw Metrics**")
         st.write(f"- Raw Avg Rating: {row['raw_avg']}")
-        st.write(f"- Variance: {row['rating_variance']}")
+        st.write(f"- Variance: {row.get('rating_variance', row.get('variance', 'N/A'))}")
         st.write(f"- Reliability: {row['reliability']:.2f}")
     with col2:
         render_radar(row)
