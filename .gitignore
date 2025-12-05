@@ -1,11 +1,10 @@
 .env
 __pycache__/
-*.pkl
-*.pth
 *.pt
 *.log
 *.env
 .DS_Store
 .vscode/
 .idea/
-*.json
+raw/*.json
+raw/*/*.json
