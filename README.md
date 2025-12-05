@@ -1,6 +1,6 @@
 ## Meta-AC 项目说明
 
-面向 ICLR/OpenReview 评审数据的分析管线，提供数据预处理、特征抽取、多模型训练与可视化。目标是构建一个可复现、可审计的评审辅助流程，而非强调模型“智能”。
+面向 ICLR/OpenReview 评审数据的分析pipeline，提供数据预处理、特征抽取、多模型训练与可视化。目标是构建一个可复现、可审计的评审辅助流程，而非强调模型“智能”。
 
 ---
 
@@ -126,8 +126,3 @@ data-analysis-project/
 - 鲁棒性：`main.py` 会跳过异常样本，流程持续运行。
 - 比例保持：Accept 内部保持 Oral/Spotlight/Poster 原始比例。
 
----
-
-## 许可证
-
-MIT，详见 LICENSE。
