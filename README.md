@@ -20,7 +20,7 @@
 
 ### 安装依赖
 ```bash
-pip install -r requirements.txt  # 如无此文件，可按需安装 pandas numpy tqdm sentence-transformers scikit-learn joblib streamlit seaborn matplotlib
+pip install pandas numpy tqdm sentence-transformers scikit-learn joblib streamlit seaborn matplotlib
 ```
 
 ### API 密钥（可选，ArgumentAgent 调用 DeepSeek）
@@ -35,7 +35,7 @@ export DEEPSEEK_API_KEY="your_key"
 
 1) 数据预处理与抽样  
 ```bash
-python process_data.py --total-samples 50
+python process_data.py --total-samples 1000
 ```
 输出：
 - `data/processed/meta_ac_dataset_sampled.json`
