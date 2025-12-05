@@ -1,0 +1,18 @@
+paper_id,title,true_decision,pred_prob
+9HK2rHNAhd,SqueezeAttention: 2D Management of KV-Cache in LLM Inference via Layer-wise Optimal Budget,1,0.18186540373187746
+OeHSkJ58TG,Incidental Polysemanticity: A New Obstacle for Mechanistic Interpretability,0,0.5196412405752061
+NJUzUq2OIi,Efficient Full-Context Retrieval for Long Documents,0,0.6341009078575787
+hQOLtZ40hZ,Orthogonalized Estimation of Difference of Q-functions,0,0.8189572424620668
+DF5TVzpTW0,Detecting and Perturbing Privacy-Sensitive Neurons to Defend Embedding Inversion Attacks,0,0.8236188371747498
+veyPSmKrX4,Rethinking Language-Alignment in Human Visual Cortex with Syntax Manipulation and Word Models,0,0.5767097336705747
+GpUO6qYNQG,SpeechFake: A Large-Scale Multilingual Speech Deepfake Dataset Toward Cutting-Edge Speech Generation Methods,0,0.5541964283664921
+QSTv4os59f,Learning-Augmented Streaming Algorithms for Correlation Clustering,0,0.8419356536416281
+gcouwCx7dG,Improving the Sparse Structure Learning of Spiking Neural Networks from the View of Compression Efficiency,1,0.4610516320707842
+hJVdwBpWjt,NatureLM-audio: an Audio-Language Foundation Model for Bioacoustics,1,0.12489739907270293
+Uc3kog3O45,Global Context-aware Representation Learning for Spatially Resolved Transcriptomics,0,0.6320125311667603
+pwNIOcr8fU,Towards Syn-to-Real IQA: A Novel Perspective on Reshaping Synthetic Data Distributions,0,0.6811531668383829
+raUnLe0Z04,Lossy Compression with Pretrained Diffusion Models,1,0.36438772151714727
+yzloNYH3QN,Attention in Large Language Models Yields Efficient Zero-Shot Re-Rankers,1,0.07008184406795419
+Z7aq3djHZw,JPEG-LM: LLMs as Image Generators with Canonical Codec Representations,0,0.908643241239087
+1qq1QJKM5q,More Experts Than Galaxies: Conditionally-Overlapping Experts with Biologically-Inspired Fixed Routing,1,0.35027079643646614
+vJgJSrYPe1,Logic-Logit: A Logic-Based Approach to Choice Modeling,1,0.2962286055437423

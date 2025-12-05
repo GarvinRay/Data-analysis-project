@@ -6,10 +6,11 @@ Features are extracted via agents.BayesianAgent and agents.ArgumentAgent.
 
 from __future__ import annotations
 
+import argparse
 import json
+import os
 from pathlib import Path
 from typing import Any, Dict, List, Sequence, Tuple
-import argparse
 
 import joblib
 import numpy as np
@@ -20,10 +21,12 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from tqdm import tqdm
 
-from agents import ArgumentAgent, BayesianAgent
+from agents import ArgumentAgent, BayesianAgent, DomainAgent
 from meta_ac.config import JSON_PATH, MODEL_PATH, OUTPUT_DIR, PREDICTIONS_PATH, STATS_PATH
 from meta_ac.models import PaperRecord
 
+# prevent HF tokenizers parallel warnings when forking
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
 def load_data_frame(path: Path) -> pd.DataFrame:
     if not path.exists():
@@ -88,9 +91,11 @@ def train_and_evaluate(
     raw_avgs: List[float],
     variances: List[float],
     sentiments: List[float],
+    densities: List[float],
+    novelties: List[float],
     model_type: str = "MLP",
     grid_search: bool = False,
-) -> Tuple[Any, StandardScaler, np.ndarray, List[Dict[str, Any]]]:
+) -> Tuple[Any, StandardScaler, np.ndarray, List[Dict[str, Any]], Dict[str, Any], List[Dict[str, Any]]]:
     indices = np.arange(len(y))
     X_train, X_test, y_train, y_test, idx_train, idx_test = train_test_split(
         X, y, indices, test_size=0.2, random_state=42, stratify=y
@@ -100,6 +105,7 @@ def train_and_evaluate(
     X_test_scaled = scaler.transform(X_test)
 
     clf: Any
+    best_params: Dict[str, Any] | None = None
     if model_type.upper() == "TABNET":
         try:
             from pytorch_tabnet.tab_model import TabNetClassifier
@@ -139,7 +145,8 @@ def train_and_evaluate(
             )
             search.fit(X_train_scaled, y_train)
             clf = search.best_estimator_
-            print(f"Grid search best params: {search.best_params_}")
+            best_params = search.best_params_
+            print(f"Grid search best params: {best_params}")
         else:
             clf = MLPClassifier(
                 hidden_layer_sizes=(16, 8),
@@ -156,9 +163,11 @@ def train_and_evaluate(
     y_pred = clf.predict(X_test_scaled)
     y_prob_test = clf.predict_proba(X_test_scaled)[:, 1]
 
-    print(f"Accuracy: {accuracy_score(y_test, y_pred):.3f}")
+    acc = accuracy_score(y_test, y_pred)
+    report = classification_report(y_test, y_pred, digits=3)
+    print(f"Accuracy: {acc:.3f}")
     print("Classification Report:")
-    print(classification_report(y_test, y_pred, digits=3))
+    print(report)
 
     mis_details: List[Dict[str, Any]] = []
     for i, y_p, y_t, prob in zip(idx_test, y_pred, y_test, y_prob_test):
@@ -182,6 +191,7 @@ def train_and_evaluate(
         print(f"Boundary Accuracy (0.4-0.6 prob band): {boundary_acc:.3f}")
     else:
         print("Boundary Accuracy: no samples in [0.4, 0.6] band.")
+        boundary_acc = None
 
     probs_all = clf.predict_proba(scaler.transform(X))[:, 1]
 
@@ -193,11 +203,22 @@ def train_and_evaluate(
             "raw_avg": raw_avgs[i],
             "variance": variances[i],
             "sentiment_score": sentiments[i],
+            "density_score": densities[i] if i < len(densities) else None,
+            "novelty_score": novelties[i] if i < len(novelties) else None,
             "prob_accept": prob,
             "true_label": int(y_test[local_idx]),
         })
 
-    return clf, scaler, probs_all, test_info
+    metrics = {
+        "accuracy": float(acc),
+        "classification_report": report,
+        "boundary_accuracy": None if boundary_acc is None else float(boundary_acc),
+        "best_params": best_params,
+        "model_type": model_type,
+        "grid_search": grid_search,
+    }
+
+    return clf, scaler, probs_all, test_info, metrics, mis_details
 
 
 def main() -> None:
@@ -226,6 +247,10 @@ def main() -> None:
 
     bayes = BayesianAgent()
     arg = ArgumentAgent()
+    abstract_corpus = [
+        (rec.abstract_clean or rec.abstract_raw or "") for rec in records
+    ]
+    domain = DomainAgent(abstract_corpus)
 
     cache_path = Path("llm_scores_cache.csv")
     cache_df = (
@@ -243,6 +268,8 @@ def main() -> None:
     raw_avgs: List[float] = []
     variances: List[float] = []
     sentiments: List[float] = []
+    densities: List[float] = []
+    novelties: List[float] = []
 
     for row, record in tqdm(merged, desc="Extracting features", unit="paper"):
         try:
@@ -256,12 +283,25 @@ def main() -> None:
             avg_rating = _safe_float(row.get("avg_rating")) or 0.0
             variance = _safe_float(row.get("rating_variance")) or 0.0
             calibrated = bayes.calibrate_score(row)
+            try:
+                domain_scores = domain.analyze_novelty(
+                    record.abstract_clean or record.abstract_raw or ""
+                )
+                density_score = float(domain_scores.get("density_score", 0.5))
+                novelty_score = float(domain_scores.get("novelty_score", 0.5))
+            except Exception:
+                density_score = 0.5
+                novelty_score = 0.5
+            densities.append(density_score)
+            novelties.append(novelty_score)
 
             decision_value = row.get("decision")
             if pd.isna(decision_value):
                 decision_value = record.decision
 
-            X_rows.append([avg_rating, variance, calibrated, llm_score])
+            X_rows.append(
+                [avg_rating, variance, calibrated, llm_score, density_score, novelty_score]
+            )
             y.append(int(decision_value))
             ids.append(paper_id)
             titles.append(record.title or paper_id)
@@ -282,7 +322,7 @@ def main() -> None:
     if X.size == 0:
         raise RuntimeError("No features extracted; aborting.")
 
-    model, scaler, probs, test_info = train_and_evaluate(
+    model, scaler, probs, test_info, metrics, mis_details = train_and_evaluate(
         X,
         y_arr,
         ids,
@@ -290,6 +330,8 @@ def main() -> None:
         raw_avgs,
         variances,
         sentiments,
+        densities,
+        novelties,
         model_type=args.model_type,
         grid_search=args.grid_search,
     )
@@ -300,9 +342,28 @@ def main() -> None:
     results.to_csv(PREDICTIONS_PATH, index=False)
     print(f"Saved predictions to {PREDICTIONS_PATH}")
 
+    # Persist metrics and misclassified samples for reproducibility
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    metrics_path = OUTPUT_DIR / "run_metrics.json"
+    with metrics_path.open("w", encoding="utf-8") as mf:
+        json.dump(metrics, mf, ensure_ascii=False, indent=2)
+    print(f"Saved metrics to {metrics_path}")
+
+    if mis_details:
+        mis_path = OUTPUT_DIR / "misclassified.csv"
+        pd.DataFrame(mis_details).to_csv(mis_path, index=False)
+        print(f"Saved misclassified samples to {mis_path}")
+
     # Persist model + scaler and feature names
     MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
-    feature_names = ["avg_rating", "variance", "calibrated_score", "llm_score"]
+    feature_names = [
+        "avg_rating",
+        "variance",
+        "calibrated_score",
+        "llm_score",
+        "density_score",
+        "novelty_score",
+    ]
     artifact = {
         "model": model,
         "scaler": scaler,

@@ -1,201 +1,201 @@
-paper_id,title,raw_avg,variance,sentiment_score,prob_accept,true_label
-Ian00SaFHg,Efficient Model-Based Reinforcement Learning Through Optimistic Thompson Sampling,6.0,4.5,0.365487757581775,0.6823768085611475,1
-tmwR707odU,Curriculum GNN-LLM Alignment for Text-Attributed Graphs,4.5,0.75,0.8481837296671344,0.017213339290285092,0
-RDz3EPC3Lp,SafeAuto: Knowledge-Enhanced Safe Autonomous Driving with Multimodal Foundation Models,4.0,2.0,0.3683307407951537,0.0019881205301887687,0
-jO3QEsm15T,Optimal Transport for Reducing Bias in Causal Inference without Data Splitting,5.5,0.25,1.0,0.3087027396560402,0
-Za3M6OZuCU,Actions Speak Louder Than Words: Rate-Reward Trade-off in Markov Decision Processes,6.75,1.6875,0.0975781938249406,0.955521214106082,1
-v4MTnPiYXY,Q-SFT: Q-Learning for Language Models via Supervised Fine-Tuning,7.0,1.0,1.0,0.9838209772689065,1
-Q6PAnqYVpo,SoftMatcha: A Soft and Fast Pattern Matcher for Billion-Scale Corpus Searches,5.666666666666667,0.2222222222222222,0.0,0.635078620593201,1
-Equ277PBN0,Privacy-Preserving Personalized Federated Prompt Learning for Multimodal Large Language Models,5.75,0.1875,1.0,0.5396138482775532,1
-1S8ndwxMts,Towards Robust Evaluation of Protein Generative Models: A Systematic Analysis of Metrics,3.0,2.0,0.3861629156151504,8.406240471137492e-05,0
-wE5xp3zBaQ,"The Good, the Bad and the Ugly: Watermarks, Transferable Attacks and Adversarial Defenses",5.0,1.5,0.2402537399399237,0.054823133187733436,0
-6jxUsDAdAu,Benign Overfitting in Out-of-Distribution Generalization of Linear Models,7.0,1.0,0.0,0.9826959298040567,1
-w7P92BEsb2,PIED: Physics-Informed Experimental Design for Inverse Problems,7.0,1.0,0.4559650905676027,0.972856475360705,1
-9HK2rHNAhd,SqueezeAttention: 2D Management of KV-Cache in LLM Inference via Layer-wise Optimal Budget,5.5,3.25,0.2605284508265361,0.31718628799979,1
-JPnq9wSuSG,Adaptive Causal Experimental Design: Amortizing Sequential Bayesian Experimental Design for Causal Models,5.0,1.2,0.9744172045693325,0.09328709080737681,0
-AZVvTBxTdZ,A Neural Architecture Dataset for Adversarial Robustness,5.5,0.25,1.0,0.35525359817750607,0
-OZZYqfplS3,"Tight Stability, Convergence, and Robustness Bounds for Predictive Coding Networks",4.0,1.0,0.0,0.0006246871386563301,0
-Sh4FOyZRpv,CTSyn: A Foundation Model for Cross Tabular Data Generation,5.75,0.1875,0.6798634005510651,0.674566708222925,1
-04RGjODVj3,From Rest to Action: Adaptive Weight Generation for Motor Imagery Classification from Resting-State EEG Using Hypernetworks,3.0,2.0,0.8102274444332458,0.00020224585046513355,0
-tyEyYT267x,Block Diffusion: Interpolating Between Autoregressive and Diffusion Language Models,8.0,0.0,0.8830489532424546,0.9980229778881674,1
-B2ChNpcEzZ,DefNTaxS: The Inevitable Need for More Structured Description in Zero-Shot Classification,4.0,1.0,1.0,0.00462976554774851,0
-AJM52ygi6Y,Decentralized Optimization with Coupled Constraints,6.25,1.1875,1.0,0.8985765205096387,1
-SX2Z5tgiUu,PrivateChat: A Secure Encrypted Communication Framework with Black-box LLMs,4.0,4.5,0.0,0.0005477933991311157,0
-6bKEWevgSd,ManiSkill-HAB: A Benchmark for Low-Level Manipulation in Home Rearrangement Tasks,5.75,1.6875,0.8300118445763986,0.6563751655492925,1
-mHkbi3XM58,Conditional density estimation for video prediction with score-based models,3.25,5.1875,0.5783180142237856,0.00015112286213435914,0
-DpLFmc09pC,DEPfold: RNA Secondary Structure Prediction as Dependency Parsing.,6.0,0.0,0.562764563740878,0.8644180306197319,1
-MMwaQEVsAg,Commit0: Library Generation from Scratch,6.666666666666667,0.8888888888888888,1.0,0.9664486619575713,1
-ZAyuwJYN8N,InterMask: 3D Human Interaction Generation via Collaborative Masked Modeling,6.0,0.0,0.3729439364420781,0.8683606212339483,1
-dCcY2pyNIO,In-context Time Series Predictor,6.25,4.1875,0.5527811296319127,0.7642085563701202,1
-8sglLco8Ti,ChunkKV: Semantic-Preserving KV Cache Compression for Efficient Long-Context LLM Inference,5.25,0.1875,0.0361299685293736,0.11719925365138562,0
-E48QvQppIN,Bayesian Optimization of Antibodies Informed by a Generative Model of Evolving Sequences,7.25,1.6875,0.3077409459558965,0.9819281515004682,1
-VZC9aJoI6a,PromptWizard: Task-Aware Prompt Optimization Framework,4.4,1.44,0.3011061659355849,0.0056415597095773986,0
-bc3sUsS6ck,Generative Adapter: Contextualizing Language Models in Parameters with A Single Forward Pass,5.75,0.1875,0.7724305140338497,0.6196919197381888,1
-uMEsKEiB7J,NovelQA: Benchmarking Question Answering on Documents Exceeding 200K Tokens,6.4,0.64,0.2991131415798754,0.9425400645641524,1
-d8hYXbxX71,Policy Design in Long-run Welfare Dynamics,6.5,0.75,0.36357687771011,0.9629935532876508,1
-yRKelogz5i,Causally Motivated Sycophancy Mitigation for Large Language Models,6.0,0.0,0.472012432110988,0.8692294706178177,1
-WbqBj2aC5k,Online Detecting LLM-Generated Texts via Sequential Hypothesis Testing by Betting,5.4,2.64,0.6988286109548049,0.38463519502537286,0
-0koPj0cJV6,A Watermark for Black-Box Language Models,4.0,3.2,1.0,0.0038284453047372244,0
-gz8Rr1iuDK,Geometric and Physical Constraints Synergistically Improve Neural PDE Integration,4.0,2.0,0.4105327717426778,0.0022619054668132138,0
-OyAMxlDikl,Neural Network Adaptive Quantization based on Bayesian Deep Learning,4.0,2.0,0.4259289579167825,0.001941542764941325,0
-m2kJuN1bKt,Reformer: A Deep Learning Model for Runtime Selection of Convolution Kernels,4.6,1.84,0.83925034035617,0.022757447989345786,0
-RcNzwKrjTo,Conformal Prediction Sets with Improved Conditional Coverage using Trust Scores,5.0,1.5,0.0,0.026020275802516465,0
-xsELpEPn4A,JudgeLM: Fine-tuned Large Language Models are Scalable Judges,7.5,0.75,0.1367173892323623,0.9929834539229082,1
-gLa96FlWwn,Scalable Influence and Fact Tracing for Large Language Model Pretraining,7.0,1.0,0.8876650491660925,0.9817989670417677,1
-OeHSkJ58TG,Incidental Polysemanticity: A New Obstacle for Mechanistic Interpretability,5.666666666666667,0.2222222222222222,0.0,0.6620733982506419,0
-F4meTCwlxZ,Consistency Guaranteed Causal Graph Recovery with Large Language Models,5.0,1.2,0.5377168581870411,0.047038508591249736,0
-5RZoYIT3u6,You Only Prune Once: Designing Calibration-Free Model Compression With Policy Learning,6.0,0.0,0.9826241046295467,0.8055628535144345,1
-Frhj9T7ihK,"All Models are Biased, Some are More Transparent about it: Fully Interpretable and Adjustable Model for Mental Disorder Diagnosis",3.0,2.0,0.5857051708583629,0.0001266545961204012,0
-CS2JWaziYr,MagicDec: Breaking the Latency-Throughput Tradeoff for Long Context Generation with Speculative Decoding,6.75,1.6875,0.0,0.9634029936914406,1
-BPgK5XW1Nb,Spread Preference Annotation: Direct Preference Judgment for Efficient LLM Alignment,8.666666666666666,0.8888888888888888,0.5545259681298684,0.9991633227781045,1
-0a7TRHhhcS,Preference-Driven Spatial-Temporal Counting Process Models,4.5,2.25,0.6771927299143573,0.01352887925732767,0
-Oeb0I3JcVc,Geometry-Aware Approaches for Balancing Performance and Theoretical Guarantees in Linear Bandits,7.0,1.6,0.5833198227774099,0.9750663770789162,1
-mDvL3wcmms,Classification-denoising networks,4.0,3.0,0.4913294535584657,0.0016594358060536697,0
-ZTpWOwMrzQ,Radar: Fast Long-Context Decoding for Any Transformer,6.6,3.84,1.0,0.8505682117099813,1
-DjHnxxlqwl,"Solving Urban Network Security Games: Learning Platform, Benchmark, and Challenge for AI Research",4.75,1.1875,0.5985066234742125,0.026721482674240064,0
-2bIQBDSfRk,DenseAttention: No-Compromise Exact All $N \times N$  Interactions Algorithm with $O(N)$ Space and Time Complexity,4.5,0.75,0.7364879237522508,0.01387321764325804,0
-0EP01yhDlg,Faster Language Models with Better Multi-Token Prediction Using Tensor Decomposition,5.0,0.0,0.2441751029441612,0.03766022649204677,0
-hmDt068MoZ,Can Knowledge Editing Really Correct Hallucinations?,6.0,1.5,0.7362004131113753,0.7744130932217579,1
-NJUzUq2OIi,Efficient Full-Context Retrieval for Long Documents,5.75,0.1875,1.0,0.5643104611581714,0
-hQOLtZ40hZ,Orthogonalized Estimation of Difference of Q-functions,6.0,0.0,0.6319456610004819,0.8638660226854902,0
-sb1HgVDLjN,Offline Model-Based Optimization by Learning to Rank,6.666666666666667,0.8888888888888888,1.0,0.9727096592722585,1
-jwsPS8yRe4,Trained Transformer Classifiers Generalize and Exhibit Benign Overfitting In-Context,6.0,0.0,0.6004512452452784,0.8639119048945779,1
-6LtdZCyuZR,NutriBench: A Dataset for Evaluating Large Language Models in Nutrition Estimation from Meal Descriptions,6.0,0.0,0.3201492866282963,0.8681279601474429,1
-XwUrzurG94,Rapidly Adapting Policies to the Real-World via Simulation-Guided Fine-Tuning,5.75,0.1875,0.4832469332501141,0.7574291268139827,1
-LzycEbgLoi,3D-CT-GPT++: Enhancing 3D Radiology Report Generation with Direct Preference Optimization and Large Vision-Language Models,5.25,0.1875,0.2239703555279554,0.12748355887066734,0
-DF5TVzpTW0,Detecting and Perturbing Privacy-Sensitive Neurons to Defend Embedding Inversion Attacks,6.0,0.0,0.5374757437877768,0.8659945847634831,0
-dVrYcscgLu,Latent-Predictive Empowerment: Measuring Empowerment without a Simulator,3.75,1.6875,0.1122585964640751,0.00046231301383436584,0
-HN0CYZbAPw,Efficient Online Reinforcement Learning Fine-Tuning Need Not Retain Offline Data,6.5,0.75,0.4625321470706523,0.9472129713625486,1
-SPS6HzVzyt,Context-Parametric Inversion: Why Instruction Finetuning May Not Actually Improve Context Reliance,8.0,0.0,0.0,0.997792908342838,1
-Rp3DjldbSc,ICConv: A Large-Scale Intent-Oriented and Context-Aware Conversational Search Dataset,4.0,1.0,0.0,0.0005929832736050816,0
-YeSwPnI4be,DASH: Data-Efficient Learned Cost Models for Sparse Matrix Computations on Emerging Hardware Platforms,5.25,1.6875,0.0,0.10263142559451613,0
-MK6E6IgROl,ProcBench: Benchmark for Multi-Step Reasoning and Following Procedure,3.75,1.6875,0.726060526886021,0.0017409919054671582,0
-DIAaRdL2Ra,Convergence of Adafactor under Non-Convex Smooth Stochastic Optimization,5.0,0.0,0.1227340342720622,0.03496560628307327,0
-r1KcapkzCt,Monte Carlo Planning with Large Language Model for Text-Based Game Agents,7.0,2.0,0.3237538036503445,0.9691348919623177,1
-4dAgG8ma3B,Chemistry-Inspired Diffusion with Non-Differentiable Guidance,6.0,1.5,0.519132488599666,0.8259808666138911,1
-VoayJihXra,NeSyC: A Neuro-symbolic Continual Learner For Complex Embodied Tasks In Open Domains,7.0,4.5,0.0,0.9643778246375277,1
-1eQT9OzfNQ,Long Context Compression with Activation Beacon,7.0,1.0,0.4493875758322118,0.972810451020936,1
-BgcapX9ers,Hierarchical Object-Oriented POMDP Planning for Object Rearrangement,5.0,1.5,0.6687523213615988,0.06989153385918852,0
-qGL6fE1lqd,LLMPhy: Complex Physical Reasoning Using Large Language Models and World Models,4.4,1.44,0.4898341138494915,0.008518116250687494,0
-3bcN6xlO6f,Video Action Differencing,6.5,0.75,0.5311126721249062,0.9574187211773966,1
-veyPSmKrX4,Rethinking Language-Alignment in Human Visual Cortex with Syntax Manipulation and Word Models,5.75,0.1875,1.0,0.5283159847794838,0
-WyZT4ZmMzf,Evaluating Representational Similarity Measures from the Lens of Functional Correspondence,3.5,0.75,0.6306844885446204,0.0006820184688161528,0
-FAfxvdv1Dy,STAFF: Speculative Coreset Selection for Task-Specific Fine-tuning,6.5,0.75,0.0,0.9623289108891154,1
-NkGDNM8LB0,Hyperbolic Genome Embeddings,6.5,2.25,1.0,0.909205128719368,1
-PHg4rAXFVH,RTop-K: Ultra-Fast Row-Wise Top-K Selection for Neural Network Acceleration on GPUs,6.5,4.25,0.537980218655383,0.8742258699910452,1
-KSBx6FBZpE,Uncovering Latent Memories in Large Language Models,6.25,4.1875,0.5712526370882771,0.761378733684343,1
-GpUO6qYNQG,SpeechFake: A Large-Scale Multilingual Speech Deepfake Dataset Toward Cutting-Edge Speech Generation Methods,5.666666666666667,0.2222222222222222,0.3379975173479053,0.6567589369799748,0
-NPLty3VT1c,Solving Nash Equilibrium Scalably via Deep-Learning-Augmented Iterative Algorithms,3.5,0.75,1.0,0.0008233280063335778,0
-viQ1bLqKY0,EXecution-Eval: Can language models execute real-world code?,4.0,1.0,0.6206658582735678,0.0030768438528221017,0
-Z756zcjNcC,Denoising Diffusion Causal Discovery,4.5,2.25,0.7502396919082577,0.017015198179397995,0
-QSTv4os59f,Learning-Augmented Streaming Algorithms for Correlation Clustering,6.0,0.0,0.4746238812922298,0.8691258009382276,0
-L14sqcrUC3,TabReD: Analyzing Pitfalls and Filling the Gaps in Tabular Deep Learning Benchmarks,6.75,4.6875,0.7535794006579959,0.8715234558891318,1
-1qGkuxI9UX,Aligning Language Models with Demonstrated Feedback,6.25,1.1875,0.0,0.9246377449674584,1
-EDoD3DgivF,On Linear Representations and Pretraining Data Frequency in Language Models,6.0,0.0,0.7127320643001114,0.8549229678582948,1
-6PEbll1C0M,Generating All-Atom Protein Structure from Sequence-Only Training Data,5.5,0.25,1.0,0.278073453936733,0
-drrXhD2r8V,Structure-Aware Parameter-Efficient Machine Unlearning on Transformer Models,5.0,1.5,0.621852450154995,0.05396696785974691,0
-rpwGUtTeA5,UniCBE: An Uniformity-driven Comparing Based Evaluation Framework with Unified Multi-Objective Optimization,7.2,0.96,0.6710962061431325,0.9874749773996968,1
-eHfq8Q3LeD,Matrix Product Sketching via Coordinated Sampling,5.75,0.1875,0.2231400945819464,0.7274247654150632,1
-IcovaKGyMp,Large Language Models Are Active Critics in NLG Evaluation,4.75,1.1875,1.0,0.038826520900358194,0
-gcouwCx7dG,Improving the Sparse Structure Learning of Spiking Neural Networks from the View of Compression Efficiency,5.75,3.1875,0.0039500980626121,0.5103447465669688,1
-IEs29RYxfK,VisionTS: Visual Masked Autoencoders Are Free-Lunch Zero-Shot Time Series Forecasters,5.333333333333333,4.222222222222222,0.1564038579018453,0.0981967210751438,0
-6ycX677p2l,Episodic Memories Generation and Evaluation Benchmark for Large Language Models,6.6,1.44,0.9600149717440348,0.9463225243524986,1
-QnkhVwSu7u,ELEMENTAL: Interactive Learning from Demonstrations and Vision-Language Models for Interpretable Reward Design in Robotics,5.25,3.1875,1.0,0.22866764957745656,0
-4Sv5MQ931E,MSR-ViR: Modularized Self-reflected Video Reasoner for Video Question Answering,5.0,1.5,0.0,0.01624771313086295,0
-eeJz7eDWKO,A Meta-Learning Approach to Bayesian Causal Discovery,6.0,0.0,1.0,0.8016892852136241,1
-oCUYc7BzXQ,Generative Classifiers Avoid Shortcut Solutions,6.75,1.6875,0.2945676088908643,0.9535628794404154,1
-eC2a2IndIt,BadJudge: Backdoor Vulnerabilities of LLM-As-A-Judge,6.75,1.6875,0.3382053716385307,0.9520569837738381,1
-SabhfFUfA1,"Inference, Fast and Slow: Reinterpreting VAEs for OOD Detection",4.666666666666667,1.5555555555555556,0.148240633170607,0.007719953833159237,0
-9juyeCqL0u,Causal Order: The Key to Leveraging Imperfect Experts in Causal Inference,6.8,0.96,0.5606573344502543,0.9747594197802278,1
-8lwWBSa1pJ,Time-aware World Model:  Adaptive Learning of Task Dynamics,5.6,2.64,0.3689476589915796,0.5303660195777086,0
-FCMpUOZkxi,On Stochastic Contextual Bandits with Knapsacks in Small Budget Regime,6.75,1.6875,1.0,0.961450964409011,1
-IqHeDe2lbl,Sparse components distinguish visual pathways & their alignment to neural networks,7.25,1.6875,0.6320930397751037,0.9839294787487668,1
-szRmEM8Kx5,Effective post-training embedding compression via temperature control in contrastive training,7.5,0.75,0.1158074021706096,0.9935425450456015,1
-Wxl0JMgDoU,Understanding Skill Adaptation in Transformers Using Sparse Autoencoders: Chess as a Model System,2.5,0.75,0.1829383894717839,1.2264315029600071e-05,0
-78tc3EiUrN,MADGEN: Mass-Spec attends to De Novo Molecular generation,6.0,0.0,0.2883062484090082,0.8691694241155975,1
-aQSbfKYXvo,The Effect of Personalization in FedProx: A Fine-grained Analysis on Statistical Accuracy and Communication Efficiency,5.2,5.36,0.5674235394825837,0.06740790020447003,0
-v2nEL42Pvb,SSGNN: Simple Yet Effective Spectral Graph Neural Network,5.0,0.0,0.3254781569139363,0.04045315924530171,0
-hJVdwBpWjt,NatureLM-audio: an Audio-Language Foundation Model for Bioacoustics,5.333333333333333,4.222222222222222,0.549435333089779,0.16690367533657272,1
-4A9IdSa1ul,FreDF: Learning to Forecast in the Frequency Domain,7.0,1.0,0.6460270628173302,0.981490381733718,1
-XH3OiIhtvf,Unsupervised Federated Learning for Privacy Preserving in Face Recognition System,2.0,1.0,0.0715432084063615,2.1697115396178836e-06,0
-te30nmLaFf,Teaching Transformers Causal Reasoning through Axiomatic Training,4.25,1.6875,0.6033544032491283,0.006358651102337945,0
-S2WHlhvFGg,Advancing Drug-Target Interaction Prediction via Graph Transformers and Residual Protein Embeddings,3.0,0.0,0.6455198910219064,0.00011476750921138732,0
-CkUHtnyhpY,When narrower is better: the narrow width limit of Bayesian parallel branching neural networks,6.5,0.75,0.0,0.9601790592056622,1
-bqUsdBeRjQ,Personalized Language Modeling from Personalized Human Feedback,4.5,2.25,0.5835298364237076,0.012900834211151551,0
-aKJr5NnN8U,Toward Understanding In-context vs. In-weight Learning,6.5,0.75,0.0,0.9573986491205692,1
-z1ohBxWeL2,SwiftKV: Fast Prefill-Optimized Inference with Knowledge-Preserving Model Transformation,5.5,0.25,1.0,0.3107996822629879,0
-qPw5D0Xahv,Minimax Based  Fast-training Defense against Adversarial Policy in Two-player Competitive Games,3.5,0.75,0.0,0.000133392061890644,0
-RlpJmARXqj,Adaptive Self-Supervised Learning Strategies for Dynamic On-Device LLM Personalization,3.5,0.75,0.0,0.00012880282243665794,0
-MWSoYGPexK,Towards Efficient and Scalable Multi-agent Reasoning via Bayesian Nash Equilibrium,5.5,3.25,0.6761283906917077,0.4518761560554769,0
-N0MnPLK6r7,Toward Human-Interpretable Explanations in a Unified Framework for GNNs,4.0,1.0,0.5460075613079087,0.0027107621405550956,0
-Uc3kog3O45,Global Context-aware Representation Learning for Spatially Resolved Transcriptomics,5.75,0.1875,0.6000614461347553,0.6958025343612279,0
-gV0Moskp7k,Combating the Generalization-Forgetting Trade-off in Continual Learning: A Cautious Passive Low-Rank Approach,4.4,1.44,1.0,0.014225559078520513,0
-amDkNPVWcn,Denoising Autoregressive Transformers for Scalable Text-to-Image Generation,6.2,0.96,0.6917744759287107,0.9153447355410769,1
-pwNIOcr8fU,Towards Syn-to-Real IQA: A Novel Perspective on Reshaping Synthetic Data Distributions,5.8,0.16,0.6327796196569825,0.7254624309344392,0
-5YRw1m6GSz,Personalized Federated Learning via Tailored Lorentz Space,5.4,1.44,0.8522576064658554,0.2667005978273602,0
-hKcDOfDxgn,Brain-Like Replay Naturally Emerges in Reinforcement Learning Agents,3.75,1.6875,0.0,0.0003375692074089982,0
-VxJjw52dZu,LION: A bidirectional framework that trains like a Transformer and infers like an RNN,4.75,4.1875,0.0203972035973077,0.007687882281095146,0
-XK5jYtLMXl,Convergence Of Consistency Model With Multistep Sampling Under General Data Assumptions,5.5,0.25,0.6936720762706459,0.42214152244333647,0
-uMLeOlzlZ2,LLaMP: Large Language Model Made Powerful for High-fidelity Materials Knowledge Retrieval,5.0,9.5,0.6643731948914788,0.016291399771765247,0
-Kh5OS3oNlg,PARSE-Ego4D: Personal Action Recommendation Suggestions for Ego-Centric Videos,5.5,0.25,0.6766640782165891,0.4474033786757414,0
-YAf7MSsdTu,"Local-Global Shortest Path Algorithms on Random Graphs, Enhanced with GNNs",5.0,8.666666666666666,0.4079980737084606,0.01360480906610631,0
-DTqx3iqjkz,Convergence and Implicit Bias of Gradient Descent on Continual Linear Classification,6.25,1.1875,0.3397684109539568,0.9164309223020929,1
-U49N5V51rU,A Formal Framework for Understanding Length Generalization in Transformers,6.8,0.96,0.3659068678765336,0.9676753005947236,1
-zHeHIIFQVF,Train once and generalize: Zero-shot quantum state preparation with RL,4.333333333333333,1.8888888888888888,0.3535255220546139,0.004865798611269497,0
-06ZvHHBR0i,Adversarial Multi-Agent Evaluation of Large Language Models through Iterative Debate,2.5,0.75,0.0,7.054087810317474e-06,0
-zpDGwcmMV4,"Physics of Language Models: Part 2.2, How to Learn From Mistakes on Grade-School Math Problems",6.75,1.6875,0.9367056884822202,0.959220254542964,1
-j0KjevdhkH,SIG: Self-Interpretable Graph Neural Network for Continuous-time Dynamic Graphs,5.0,0.0,1.0,0.07119573374580983,0
-9Y6QWwQhF3,FoREST: Frame of Reference Evaluation in Spatial Reasoning Tasks,4.25,1.6875,0.9119178105885788,0.008997441107912755,0
-ywFOSIT9ik,Revisiting Zeroth-Order Optimization:  Minimum-Variance Two-Point Estimators and  Directionally Aligned Perturbations,6.8,0.96,1.0,0.9803770243226029,1
-75PhjtbBdr,Multi-Label Test-Time Adaptation with Bound Entropy Minimization,6.25,1.1875,1.0,0.8965265527460855,1
-6VuTXirQIv,Feature Driven Graph Coarsening for Scaling Graph Representation Learning,4.75,1.1875,0.4950192087123954,0.026277763118191216,0
-itwyfJilM5,Graph Scattering Networks with Adaptive Diffusion Kernels,4.4,1.44,0.6103269101852524,0.010236389288704306,0
-Rg2JxBZZ0g,GeneMamba: Early Parkinson’s Detection via Wearable Device and Genetic Data,3.6666666666666665,0.8888888888888888,0.6131537503472078,0.0012915601371328376,0
-vWRwdmA3wU,Differentiable Optimization of Similarity Scores Between Models and Brains,6.25,1.1875,0.5412037062149564,0.9201419203198221,1
-FtjLUHyZAO,Diffusion Generative Modeling for Spatially Resolved Gene Expression Inference from Histology Images,6.666666666666667,0.8888888888888888,0.834629117418263,0.9673006547680165,1
-MF7ljU8xcf,Compute-Optimal LLMs Provably Generalize Better with Scale,6.0,1.2,0.3484389899200579,0.8695167698989256,1
-Wb6Mcmo0ch,SHARP: Accelerating Language Model Inference by SHaring Adjacent layers with Recovery Parameters,4.75,1.1875,0.8889014524529721,0.038000284877583314,0
-10JOlFIPjt,In vivo cell-type and brain region classification via multimodal contrastive learning,7.5,0.75,0.0,0.992742248737836,1
-fv9XU7CyN2,CL-MFAP: A Contrastive Learning-Based Multimodal Foundation Model for Molecular Property Prediction and Antibiotic Screening,5.75,0.1875,0.0727023413067341,0.7019175863516959,1
-h0pACOIFxC,Meta-Learning Adaptable Foundation Models,4.75,1.1875,0.0,0.008452673840880647,0
-GlqeLNjH6p,Exploring Complex Trade-offs in Information Bottleneck through Multi-Objective Optimization,3.5,2.75,0.0924847342649437,0.00018640559622880561,0
-n8h1z588eu,Relax and Merge: A Simple Yet Effective Framework for Solving Fair $k$-Means and $k$-sparse Wasserstein Barycenter Problems,7.0,1.0,0.0663924498262473,0.9801727611736203,1
-raUnLe0Z04,Lossy Compression with Pretrained Diffusion Models,5.5,0.25,0.9423179494179766,0.3867363583596582,1
-E36NHwe7Zc,Evaluating Large Language Models through Role-Guide and Self-Reflection: A Comparative Study,6.0,0.0,1.0,0.8016892852136241,1
-fwHVclv0ij,Online Detection for Black-Box Large Language Models with Adaptive Prompt Selection,5.25,1.6875,0.3985836635313081,0.12955991014855522,0
-wVTJRnZ11Z,When GNNs meet symmetry in ILPs: an orbit-based feature augmentation approach,6.0,1.5,0.4624605159228647,0.8061610272146918,1
-8sSqNntaMr,RouteLLM: Learning to Route LLMs from Preference Data,6.333333333333333,1.5555555555555556,0.4920593303145283,0.9142717271619538,1
-Dl3MsjaIdp,Continual Slow-and-Fast Adaptation of Latent Neural Dynamics (CoSFan): Meta-Learning What-How & When to Adapt,6.75,3.6875,0.4068135275140317,0.9290129965169031,1
-fvyuKLTC3s,Cayley Maze: Universal Open-Ended Reinforcement Learning Environment,3.75,3.6875,0.6912574463913661,0.0015214844363345163,0
-NcKUcd4EkA,Harnessing Query Heterogeneity for Cost-Effective Proactive Caching in LLM Inference,5.25,1.6875,0.3322025001148623,0.1381551310609158,0
-EwRxk3Ho1V,Beyond Cosine Similarity: Introducing the Unified semantic Similarity Metric Benchmark (USMB) for Text Similarity Measurement,4.25,1.6875,0.0,0.0016094230219169399,0
-TvvT4wjEPf,Towards Practical Large-Scale Privacy-Preserving Recurrent Neural Networks,3.75,1.6875,0.0,0.00036280302452116134,0
-d159zNCmOq,From Static to Dynamic: Leveraging Implicit Behavioral Models to Facilitate Transition in Offline-to-Online Reinforcement Learning,3.4,0.64,0.5119882015105448,0.00038926078578481514,0
-yp95goUAT1,SiReRAG: Indexing Similar and Related Information for Multihop Reasoning,6.75,1.6875,0.6698008881748279,0.9578417134671383,1
-IULlNTZZel,RedHat: Towards Reducing Hallucination in Essay Critiques with Large Language Models,5.333333333333333,4.222222222222222,0.8526867348692552,0.2816408148225329,0
-9mBodivRIo,LocoVR: Multiuser Indoor Locomotion Dataset in Virtual Reality,5.8,2.56,0.0,0.601042861443877,1
-JBXO05r4AV,From Few to Many: Self-Improving Many-Shot Reasoners Through Iterative Optimization and Generation,6.25,1.1875,0.3415958885687746,0.8920405922597667,1
-Na28j1Drh7,Why Do You Answer Like That? Psychological Analysis on Underlying Connections between LLM's Values and Safety Risks,4.666666666666667,1.5555555555555556,0.0,0.005829037344666035,0
-V5lBNcD65H,MTEEG: A Multi-Task Learning Framework for Enhanced Electroencephalography Analysis Using Low-Rank Adaptation,4.75,1.1875,0.3266392176974815,0.019491044995844965,0
-pjJIimQdfU,Self-supervised Masked Graph Autoencoder via Structure-aware Curriculum,4.75,1.1875,0.3259895566990807,0.016631744433923484,0
-VELhv9BBfn,Neural Dueling Bandits: Preference-Based Optimization with Human Feedback,6.25,1.1875,0.579464079726929,0.8810456633905147,1
-p0DjhjPXl3,Stealthy Shield Defense: A Conditional Mutual Information-Based Approach against Black-Box Model Inversion Attacks,6.0,0.0,0.2519618664651042,0.8705619123720546,1
-jqff3wzkLT,Variance-Covariance Regularization Improves Representation Learning,4.333333333333333,0.8888888888888888,0.0210856264118548,0.0020881575870580643,0
-9Ieq8jQNAl,Reward Learning from Multiple Feedback Types,6.25,4.1875,1.0,0.7403858778963928,1
-DzKdjWe59v,Hint Marginalization for Improved Reasoning in Large Language Models,5.75,0.1875,0.0,0.6949527794958925,0
-yzloNYH3QN,Attention in Large Language Models Yields Efficient Zero-Shot Re-Rankers,5.0,1.5,0.5565480235745581,0.062082981860349634,1
-tGYFikNONB,Holographic Node Representations: Pre-training Task-Agnostic Node Embeddings,7.0,1.0,0.0,0.9793651078529961,1
-Kwo20MWWCb,An Asynchronous Bundle Method for Distributed Learning Problems,7.0,1.0,0.8529221265639984,0.9844236258428799,1
-Y4aWwRh25b,Follow My Instruction and Spill the Beans: Scalable Data Extraction from Retrieval-Augmented Generation Systems,6.75,1.6875,0.8541024094823567,0.9567849996469113,1
-ig2wk7kK9J,SafeDiffuser: Safe Planning with Diffusion Probabilistic Models,6.75,1.6875,0.9743214161418432,0.9619340369152811,1
-Q1QTxFm0Is,Underdamped Diffusion Bridges with Applications to Sampling,6.8,0.96,0.7669377953193868,0.9713917997415658,1
-Z7aq3djHZw,JPEG-LM: LLMs as Image Generators with Canonical Codec Representations,6.25,1.1875,0.0,0.9095376891117434,0
-XmProj9cPs,Spider 2.0: Evaluating Language Models on Real-World Enterprise Text-to-SQL Workflows,8.0,0.0,0.9611397019903528,0.9981044279944992,1
-XgH1wfHSX8,Competition Dynamics Shape Algorithmic Phases of In-Context Learning,7.5,2.75,0.6063868614400705,0.9838153016012491,1
-DKgAFfCs5F,Cocoon: Robust Multi-Modal Perception with Uncertainty-Aware Sensor Fusion,6.0,0.0,0.0,0.8716731220017135,1
-ohJxgRLlLt,Large (Vision) Language Models are Unsupervised In-Context Learners,5.75,0.1875,0.5171531711299788,0.7229062264220102,1
-1qq1QJKM5q,More Experts Than Galaxies: Conditionally-Overlapping Experts with Biologically-Inspired Fixed Routing,5.666666666666667,4.222222222222222,0.5533446711440595,0.42725571034434195,1
-RWJX5F5I9g,Brain Bandit: A Biologically Grounded Neural Network for Efficient Control of Exploration,8.0,0.0,1.0,0.9981370946385207,1
-miOYgWl60q,Multimodal Depression Detection with Contextual Position Encoding and Latent Space Regularization,4.25,1.6875,0.5446408865116177,0.006307459029459164,0
-VNMJfBBUd5,Activation Gradient based Poisoned Sample Detection Against Backdoor Attacks,6.0,0.0,0.218858360386449,0.8719742678407951,1
-vJgJSrYPe1,Logic-Logit: A Logic-Based Approach to Choice Modeling,5.5,0.25,0.9020021811103712,0.33416000017849257,1
+paper_id,title,raw_avg,variance,sentiment_score,density_score,novelty_score,prob_accept,true_label
+Ian00SaFHg,Efficient Model-Based Reinforcement Learning Through Optimistic Thompson Sampling,6.0,4.5,0.365487757581775,1.0,0.2807783007621765,0.707011271282656,1
+tmwR707odU,Curriculum GNN-LLM Alignment for Text-Attributed Graphs,4.5,0.75,0.8481837296671344,1.0,0.4216223120689392,0.027078022636411,0
+RDz3EPC3Lp,SafeAuto: Knowledge-Enhanced Safe Autonomous Driving with Multimodal Foundation Models,4.0,2.0,0.3683307407951537,1.0,0.40357033014297483,0.010372220972574996,0
+jO3QEsm15T,Optimal Transport for Reducing Bias in Causal Inference without Data Splitting,5.5,0.25,1.0,1.0,0.4388943910598755,0.28468463130730437,0
+Za3M6OZuCU,Actions Speak Louder Than Words: Rate-Reward Trade-off in Markov Decision Processes,6.75,1.6875,0.0975781938249406,1.0,0.4095589280128479,0.9787616816240783,1
+v4MTnPiYXY,Q-SFT: Q-Learning for Language Models via Supervised Fine-Tuning,7.0,1.0,1.0,2.0,0.24838067293167115,0.9870511506840397,1
+Q6PAnqYVpo,SoftMatcha: A Soft and Fast Pattern Matcher for Billion-Scale Corpus Searches,5.666666666666667,0.2222222222222222,0.0,1.0,0.41750136613845823,0.5091592946097023,1
+Equ277PBN0,Privacy-Preserving Personalized Federated Prompt Learning for Multimodal Large Language Models,5.75,0.1875,1.0,1.0,0.3709365248680115,0.5794295693353244,1
+1S8ndwxMts,Towards Robust Evaluation of Protein Generative Models: A Systematic Analysis of Metrics,3.0,2.0,0.3861629156151504,1.0,0.3365183353424072,0.0010241773619957706,0
+wE5xp3zBaQ,"The Good, the Bad and the Ugly: Watermarks, Transferable Attacks and Adversarial Defenses",5.0,1.5,0.2402537399399237,1.0,0.4126612305641174,0.08229150792867138,0
+6jxUsDAdAu,Benign Overfitting in Out-of-Distribution Generalization of Linear Models,7.0,1.0,0.0,1.0,0.4962097227573395,0.9943952550547893,1
+w7P92BEsb2,PIED: Physics-Informed Experimental Design for Inverse Problems,7.0,1.0,0.4559650905676027,1.0,0.48801894187927247,0.9902428790938447,1
+9HK2rHNAhd,SqueezeAttention: 2D Management of KV-Cache in LLM Inference via Layer-wise Optimal Budget,5.5,3.25,0.2605284508265361,1.0,0.2593081831932068,0.18186540373187746,1
+JPnq9wSuSG,Adaptive Causal Experimental Design: Amortizing Sequential Bayesian Experimental Design for Causal Models,5.0,1.2,0.9744172045693325,1.0,0.4265175461769104,0.06034526679838225,0
+AZVvTBxTdZ,A Neural Architecture Dataset for Adversarial Robustness,5.5,0.25,1.0,1.0,0.290553617477417,0.38256756681826815,0
+OZZYqfplS3,"Tight Stability, Convergence, and Robustness Bounds for Predictive Coding Networks",4.0,1.0,0.0,1.0,0.4342690587043762,0.005495465781609487,0
+Sh4FOyZRpv,CTSyn: A Foundation Model for Cross Tabular Data Generation,5.75,0.1875,0.6798634005510651,1.0,0.4041189193725586,0.6265038542080684,1
+04RGjODVj3,From Rest to Action: Adaptive Weight Generation for Motor Imagery Classification from Resting-State EEG Using Hypernetworks,3.0,2.0,0.8102274444332458,1.0,0.4145303010940552,0.0014779366371219427,0
+tyEyYT267x,Block Diffusion: Interpolating Between Autoregressive and Diffusion Language Models,8.0,0.0,0.8830489532424546,1.0,0.4215405941009521,0.9997401555664109,1
+B2ChNpcEzZ,DefNTaxS: The Inevitable Need for More Structured Description in Zero-Shot Classification,4.0,1.0,1.0,1.0,0.33515729904174807,0.01038970777524276,0
+AJM52ygi6Y,Decentralized Optimization with Coupled Constraints,6.25,1.1875,1.0,1.0,0.42659156322479247,0.9288125636760582,1
+SX2Z5tgiUu,PrivateChat: A Secure Encrypted Communication Framework with Black-box LLMs,4.0,4.5,0.0,1.0,0.4031448721885681,0.0024839387831624795,0
+6bKEWevgSd,ManiSkill-HAB: A Benchmark for Low-Level Manipulation in Home Rearrangement Tasks,5.75,1.6875,0.8300118445763986,1.0,0.30785545110702517,0.6878609891502737,1
+mHkbi3XM58,Conditional density estimation for video prediction with score-based models,3.25,5.1875,0.5783180142237856,1.0,0.36124258041381835,0.001054435289530451,0
+DpLFmc09pC,DEPfold: RNA Secondary Structure Prediction as Dependency Parsing.,6.0,0.0,0.562764563740878,1.0,0.4098743677139282,0.8231062697727032,1
+MMwaQEVsAg,Commit0: Library Generation from Scratch,6.666666666666667,0.8888888888888888,1.0,1.0,0.3636526584625244,0.9860923116343627,1
+ZAyuwJYN8N,InterMask: 3D Human Interaction Generation via Collaborative Masked Modeling,6.0,0.0,0.3729439364420781,1.0,0.39206317663192747,0.8354074017729799,1
+dCcY2pyNIO,In-context Time Series Predictor,6.25,4.1875,0.5527811296319127,1.0,0.33388872146606446,0.8395325448349107,1
+8sglLco8Ti,ChunkKV: Semantic-Preserving KV Cache Compression for Efficient Long-Context LLM Inference,5.25,0.1875,0.0361299685293736,1.0,0.2512730598449707,0.06007430114271779,0
+E48QvQppIN,Bayesian Optimization of Antibodies Informed by a Generative Model of Evolving Sequences,7.25,1.6875,0.3077409459558965,1.0,0.4350222110748291,0.9962434672146392,1
+VZC9aJoI6a,PromptWizard: Task-Aware Prompt Optimization Framework,4.4,1.44,0.3011061659355849,2.0,0.29926339387893675,0.15338091470243786,0
+bc3sUsS6ck,Generative Adapter: Contextualizing Language Models in Parameters with A Single Forward Pass,5.75,0.1875,0.7724305140338497,1.0,0.28478370904922484,0.5956135081365391,1
+uMEsKEiB7J,NovelQA: Benchmarking Question Answering on Documents Exceeding 200K Tokens,6.4,0.64,0.2991131415798754,1.0,0.3561825752258301,0.9651690890317811,1
+d8hYXbxX71,Policy Design in Long-run Welfare Dynamics,6.5,0.75,0.36357687771011,1.0,0.5100188970565795,0.9848634283052937,1
+yRKelogz5i,Causally Motivated Sycophancy Mitigation for Large Language Models,6.0,0.0,0.472012432110988,1.0,0.36543028354644774,0.8288369680180676,1
+WbqBj2aC5k,Online Detecting LLM-Generated Texts via Sequential Hypothesis Testing by Betting,5.4,2.64,0.6988286109548049,1.0,0.37847002744674685,0.3168546830192165,0
+0koPj0cJV6,A Watermark for Black-Box Language Models,4.0,3.2,1.0,1.0,0.26989294290542604,0.008230621117745685,0
+gz8Rr1iuDK,Geometric and Physical Constraints Synergistically Improve Neural PDE Integration,4.0,2.0,0.4105327717426778,1.0,0.46268634796142577,0.009478224407376338,0
+OyAMxlDikl,Neural Network Adaptive Quantization based on Bayesian Deep Learning,4.0,2.0,0.4259289579167825,1.0,0.3826684594154358,0.009733688923636942,0
+m2kJuN1bKt,Reformer: A Deep Learning Model for Runtime Selection of Convolution Kernels,4.6,1.84,0.83925034035617,1.0,0.37678922414779664,0.03653518569843749,0
+RcNzwKrjTo,Conformal Prediction Sets with Improved Conditional Coverage using Trust Scores,5.0,1.5,0.0,1.0,0.3994856595993042,0.0602850301200557,0
+xsELpEPn4A,JudgeLM: Fine-tuned Large Language Models are Scalable Judges,7.5,0.75,0.1367173892323623,1.0,0.2817691326141357,0.9987459179738648,1
+gLa96FlWwn,Scalable Influence and Fact Tracing for Large Language Model Pretraining,7.0,1.0,0.8876650491660925,1.0,0.3318644404411316,0.9953287661627099,1
+OeHSkJ58TG,Incidental Polysemanticity: A New Obstacle for Mechanistic Interpretability,5.666666666666667,0.2222222222222222,0.0,1.0,0.4054043650627136,0.5196412405752061,0
+F4meTCwlxZ,Consistency Guaranteed Causal Graph Recovery with Large Language Models,5.0,1.2,0.5377168581870411,1.0,0.39411928653717043,0.07567685499512092,0
+5RZoYIT3u6,You Only Prune Once: Designing Calibration-Free Model Compression With Policy Learning,6.0,0.0,0.9826241046295467,1.0,0.2659340500831604,0.8422439828211357,1
+Frhj9T7ihK,"All Models are Biased, Some are More Transparent about it: Fully Interpretable and Adjustable Model for Mental Disorder Diagnosis",3.0,2.0,0.5857051708583629,1.0,0.542432826757431,0.0010021215088816752,0
+CS2JWaziYr,MagicDec: Breaking the Latency-Throughput Tradeoff for Long Context Generation with Speculative Decoding,6.75,1.6875,0.0,1.0,0.34660539627075193,0.9822653845602967,1
+BPgK5XW1Nb,Spread Preference Annotation: Direct Preference Judgment for Efficient LLM Alignment,8.666666666666666,0.8888888888888888,0.5545259681298684,1.0,0.28292093276977537,0.9999675978940566,1
+0a7TRHhhcS,Preference-Driven Spatial-Temporal Counting Process Models,4.5,2.25,0.6771927299143573,1.0,0.5695576846599579,0.022460710832556866,0
+Oeb0I3JcVc,Geometry-Aware Approaches for Balancing Performance and Theoretical Guarantees in Linear Bandits,7.0,1.6,0.5833198227774099,1.0,0.3210249423980713,0.9949633420393774,1
+mDvL3wcmms,Classification-denoising networks,4.0,3.0,0.4913294535584657,1.0,0.4323933720588684,0.007527062169817046,0
+ZTpWOwMrzQ,Radar: Fast Long-Context Decoding for Any Transformer,6.6,3.84,1.0,1.0,0.3934100866317749,0.9496049270759218,1
+DjHnxxlqwl,"Solving Urban Network Security Games: Learning Platform, Benchmark, and Challenge for AI Research",4.75,1.1875,0.5985066234742125,1.0,0.525109988451004,0.04802300575052086,0
+2bIQBDSfRk,DenseAttention: No-Compromise Exact All $N \times N$  Interactions Algorithm with $O(N)$ Space and Time Complexity,4.5,0.75,0.7364879237522508,1.0,0.34992921352386475,0.025798358589850152,0
+0EP01yhDlg,Faster Language Models with Better Multi-Token Prediction Using Tensor Decomposition,5.0,0.0,0.2441751029441612,1.0,0.376608681678772,0.06077565668749725,0
+hmDt068MoZ,Can Knowledge Editing Really Correct Hallucinations?,6.0,1.5,0.7362004131113753,1.0,0.3513710379600525,0.8079836326352969,1
+NJUzUq2OIi,Efficient Full-Context Retrieval for Long Documents,5.75,0.1875,1.0,1.0,0.3162300825119019,0.6341009078575787,0
+hQOLtZ40hZ,Orthogonalized Estimation of Difference of Q-functions,6.0,0.0,0.6319456610004819,1.0,0.38427411317825316,0.8189572424620668,0
+sb1HgVDLjN,Offline Model-Based Optimization by Learning to Rank,6.666666666666667,0.8888888888888888,1.0,1.0,0.4236806154251099,0.9873648906196759,1
+jwsPS8yRe4,Trained Transformer Classifiers Generalize and Exhibit Benign Overfitting In-Context,6.0,0.0,0.6004512452452784,1.0,0.37010998725891114,0.821128058460173,1
+6LtdZCyuZR,NutriBench: A Dataset for Evaluating Large Language Models in Nutrition Estimation from Meal Descriptions,6.0,0.0,0.3201492866282963,1.0,0.5465965270996094,0.8359995574577724,1
+XwUrzurG94,Rapidly Adapting Policies to the Real-World via Simulation-Guided Fine-Tuning,5.75,0.1875,0.4832469332501141,1.0,0.3023669958114624,0.6382444986632478,1
+LzycEbgLoi,3D-CT-GPT++: Enhancing 3D Radiology Report Generation with Direct Preference Optimization and Large Vision-Language Models,5.25,0.1875,0.2239703555279554,1.0,0.4246115207672119,0.12853908056967003,0
+DF5TVzpTW0,Detecting and Perturbing Privacy-Sensitive Neurons to Defend Embedding Inversion Attacks,6.0,0.0,0.5374757437877768,1.0,0.38672943115234376,0.8236188371747498,0
+dVrYcscgLu,Latent-Predictive Empowerment: Measuring Empowerment without a Simulator,3.75,1.6875,0.1122585964640751,1.0,0.4413555979728699,0.0037594987890205494,0
+HN0CYZbAPw,Efficient Online Reinforcement Learning Fine-Tuning Need Not Retain Offline Data,6.5,0.75,0.4625321470706523,1.0,0.28225433826446533,0.9724089227546947,1
+SPS6HzVzyt,Context-Parametric Inversion: Why Instruction Finetuning May Not Actually Improve Context Reliance,8.0,0.0,0.0,1.0,0.380479109287262,0.9995988222710905,1
+Rp3DjldbSc,ICConv: A Large-Scale Intent-Oriented and Context-Aware Conversational Search Dataset,4.0,1.0,0.0,1.0,0.40657482147216795,0.005569071603506209,0
+YeSwPnI4be,DASH: Data-Efficient Learned Cost Models for Sparse Matrix Computations on Emerging Hardware Platforms,5.25,1.6875,0.0,1.0,0.38664973974227906,0.1126731903242083,0
+MK6E6IgROl,ProcBench: Benchmark for Multi-Step Reasoning and Following Procedure,3.75,1.6875,0.726060526886021,1.0,0.2684103846549988,0.00486525471051413,0
+DIAaRdL2Ra,Convergence of Adafactor under Non-Convex Smooth Stochastic Optimization,5.0,0.0,0.1227340342720622,1.0,0.4385314345359802,0.0624113116910282,0
+r1KcapkzCt,Monte Carlo Planning with Large Language Model for Text-Based Game Agents,7.0,2.0,0.3237538036503445,2.0,0.2518185257911682,0.9888323631057286,1
+4dAgG8ma3B,Chemistry-Inspired Diffusion with Non-Differentiable Guidance,6.0,1.5,0.519132488599666,1.0,0.4032259821891785,0.8345384433830393,1
+VoayJihXra,NeSyC: A Neuro-symbolic Continual Learner For Complex Embodied Tasks In Open Domains,7.0,4.5,0.0,1.0,0.32030659914016724,0.989415446239156,1
+1eQT9OzfNQ,Long Context Compression with Activation Beacon,7.0,1.0,0.4493875758322118,1.0,0.3130892038345337,0.9930659810247795,1
+BgcapX9ers,Hierarchical Object-Oriented POMDP Planning for Object Rearrangement,5.0,1.5,0.6687523213615988,1.0,0.45850287675857543,0.08714915191411729,0
+qGL6fE1lqd,LLMPhy: Complex Physical Reasoning Using Large Language Models and World Models,4.4,1.44,0.4898341138494915,1.0,0.40316635370254517,0.024665614981003538,0
+3bcN6xlO6f,Video Action Differencing,6.5,0.75,0.5311126721249062,1.0,0.34557136297225954,0.9786236134414447,1
+veyPSmKrX4,Rethinking Language-Alignment in Human Visual Cortex with Syntax Manipulation and Word Models,5.75,0.1875,1.0,1.0,0.36040387153625486,0.5767097336705747,0
+WyZT4ZmMzf,Evaluating Representational Similarity Measures from the Lens of Functional Correspondence,3.5,0.75,0.6306844885446204,1.0,0.3769607663154602,0.003603038727919144,0
+FAfxvdv1Dy,STAFF: Speculative Coreset Selection for Task-Specific Fine-tuning,6.5,0.75,0.0,1.0,0.3478569507598877,0.9731391194621087,1
+NkGDNM8LB0,Hyperbolic Genome Embeddings,6.5,2.25,1.0,1.0,0.38117810487747195,0.9739264754777199,1
+PHg4rAXFVH,RTop-K: Ultra-Fast Row-Wise Top-K Selection for Neural Network Acceleration on GPUs,6.5,4.25,0.537980218655383,1.0,0.471182781457901,0.9350142018754478,1
+KSBx6FBZpE,Uncovering Latent Memories in Large Language Models,6.25,4.1875,0.5712526370882771,1.0,0.3779749393463135,0.8366260987759626,1
+GpUO6qYNQG,SpeechFake: A Large-Scale Multilingual Speech Deepfake Dataset Toward Cutting-Edge Speech Generation Methods,5.666666666666667,0.2222222222222222,0.3379975173479053,1.0,0.4136285185813904,0.5541964283664921,0
+NPLty3VT1c,Solving Nash Equilibrium Scalably via Deep-Learning-Augmented Iterative Algorithms,3.5,0.75,1.0,1.0,0.4230209827423096,0.003160025472106439,0
+viQ1bLqKY0,EXecution-Eval: Can language models execute real-world code?,4.0,1.0,0.6206658582735678,1.0,0.32221585512161255,0.009545863801670322,0
+Z756zcjNcC,Denoising Diffusion Causal Discovery,4.5,2.25,0.7502396919082577,1.0,0.35726953744888307,0.03120691484581102,0
+QSTv4os59f,Learning-Augmented Streaming Algorithms for Correlation Clustering,6.0,0.0,0.4746238812922298,1.0,0.5045606851577759,0.8419356536416281,0
+L14sqcrUC3,TabReD: Analyzing Pitfalls and Filling the Gaps in Tabular Deep Learning Benchmarks,6.75,4.6875,0.7535794006579959,1.0,0.3844545125961304,0.964708405795144,1
+1qGkuxI9UX,Aligning Language Models with Demonstrated Feedback,6.25,1.1875,0.0,1.0,0.3248456001281738,0.9004901963680757,1
+EDoD3DgivF,On Linear Representations and Pretraining Data Frequency in Language Models,6.0,0.0,0.7127320643001114,1.0,0.36972684860229493,0.8214387510065617,1
+6PEbll1C0M,Generating All-Atom Protein Structure from Sequence-Only Training Data,5.5,0.25,1.0,1.0,0.3641445994377136,0.2865071935776631,0
+drrXhD2r8V,Structure-Aware Parameter-Efficient Machine Unlearning on Transformer Models,5.0,1.5,0.621852450154995,1.0,0.43309071063995364,0.07748826288477552,0
+rpwGUtTeA5,UniCBE: An Uniformity-driven Comparing Based Evaluation Framework with Unified Multi-Objective Optimization,7.2,0.96,0.6710962061431325,1.0,0.3215816855430603,0.9976617172483482,1
+eHfq8Q3LeD,Matrix Product Sketching via Coordinated Sampling,5.75,0.1875,0.2231400945819464,1.0,0.5229166507720947,0.6603822609610788,1
+IcovaKGyMp,Large Language Models Are Active Critics in NLG Evaluation,4.75,1.1875,1.0,1.0,0.30678064823150636,0.039981628203637855,0
+gcouwCx7dG,Improving the Sparse Structure Learning of Spiking Neural Networks from the View of Compression Efficiency,5.75,3.1875,0.0039500980626121,1.0,0.4034891724586487,0.4610516320707842,1
+IEs29RYxfK,VisionTS: Visual Masked Autoencoders Are Free-Lunch Zero-Shot Time Series Forecasters,5.333333333333333,4.222222222222222,0.1564038579018453,1.0,0.3515737295150757,0.05309112426854626,0
+6ycX677p2l,Episodic Memories Generation and Evaluation Benchmark for Large Language Models,6.6,1.44,0.9600149717440348,1.0,0.3319665789604187,0.9816487790552743,1
+QnkhVwSu7u,ELEMENTAL: Interactive Learning from Demonstrations and Vision-Language Models for Interpretable Reward Design in Robotics,5.25,3.1875,1.0,1.0,0.276543390750885,0.21267368836117323,0
+4Sv5MQ931E,MSR-ViR: Modularized Self-reflected Video Reasoner for Video Question Answering,5.0,1.5,0.0,1.0,0.31750251054763795,0.046418453920026526,0
+eeJz7eDWKO,A Meta-Learning Approach to Bayesian Causal Discovery,6.0,0.0,1.0,1.0,0.3848192453384399,0.8238888246036437,1
+oCUYc7BzXQ,Generative Classifiers Avoid Shortcut Solutions,6.75,1.6875,0.2945676088908643,1.0,0.4176247477531433,0.9834665157162398,1
+eC2a2IndIt,BadJudge: Backdoor Vulnerabilities of LLM-As-A-Judge,6.75,1.6875,0.3382053716385307,1.0,0.3611751079559326,0.9849383928334743,1
+SabhfFUfA1,"Inference, Fast and Slow: Reinterpreting VAEs for OOD Detection",4.666666666666667,1.5555555555555556,0.148240633170607,1.0,0.4770194888114929,0.02306979821592384,0
+9juyeCqL0u,Causal Order: The Key to Leveraging Imperfect Experts in Causal Inference,6.8,0.96,0.5606573344502543,1.0,0.37835336923599244,0.9913978746143918,1
+8lwWBSa1pJ,Time-aware World Model:  Adaptive Learning of Task Dynamics,5.6,2.64,0.3689476589915796,1.0,0.4207647919654846,0.41796907207643497,0
+FCMpUOZkxi,On Stochastic Contextual Bandits with Knapsacks in Small Budget Regime,6.75,1.6875,1.0,1.0,0.3162599205970764,0.9908527329712092,1
+IqHeDe2lbl,Sparse components distinguish visual pathways & their alignment to neural networks,7.25,1.6875,0.6320930397751037,1.0,0.41863250732421875,0.9970225531073733,1
+szRmEM8Kx5,Effective post-training embedding compression via temperature control in contrastive training,7.5,0.75,0.1158074021706096,1.0,0.4770425081253052,0.9984880821245964,1
+Wxl0JMgDoU,Understanding Skill Adaptation in Transformers Using Sparse Autoencoders: Chess as a Model System,2.5,0.75,0.1829383894717839,1.0,0.3903846383094788,0.0002660500611407159,0
+78tc3EiUrN,MADGEN: Mass-Spec attends to De Novo Molecular generation,6.0,0.0,0.2883062484090082,1.0,0.4102185249328613,0.8510267175214108,1
+aQSbfKYXvo,The Effect of Personalization in FedProx: A Fine-grained Analysis on Statistical Accuracy and Communication Efficiency,5.2,5.36,0.5674235394825837,1.0,0.3676410675048828,0.059913150519467814,0
+v2nEL42Pvb,SSGNN: Simple Yet Effective Spectral Graph Neural Network,5.0,0.0,0.3254781569139363,1.0,0.36527606248855593,0.05865468902798102,0
+hJVdwBpWjt,NatureLM-audio: an Audio-Language Foundation Model for Bioacoustics,5.333333333333333,4.222222222222222,0.549435333089779,1.0,0.4564633250236511,0.12489739907270293,1
+4A9IdSa1ul,FreDF: Learning to Forecast in the Frequency Domain,7.0,1.0,0.6460270628173302,1.0,0.4414284110069275,0.9941956088995666,1
+XH3OiIhtvf,Unsupervised Federated Learning for Privacy Preserving in Face Recognition System,2.0,1.0,0.0715432084063615,1.0,0.368170964717865,8.498459026367877e-05,0
+te30nmLaFf,Teaching Transformers Causal Reasoning through Axiomatic Training,4.25,1.6875,0.6033544032491283,1.0,0.4074604868888855,0.018444600961194088,0
+S2WHlhvFGg,Advancing Drug-Target Interaction Prediction via Graph Transformers and Residual Protein Embeddings,3.0,0.0,0.6455198910219064,1.0,0.2731351852416992,0.0008341767016529673,0
+CkUHtnyhpY,When narrower is better: the narrow width limit of Bayesian parallel branching neural networks,6.5,0.75,0.0,1.0,0.4056005597114563,0.9746860308601716,1
+bqUsdBeRjQ,Personalized Language Modeling from Personalized Human Feedback,4.5,2.25,0.5835298364237076,1.0,0.3157679080963135,0.02459336082083337,0
+aKJr5NnN8U,Toward Understanding In-context vs. In-weight Learning,6.5,0.75,0.0,1.0,0.34151023626327515,0.9681935496604002,1
+z1ohBxWeL2,SwiftKV: Fast Prefill-Optimized Inference with Knowledge-Preserving Model Transformation,5.5,0.25,1.0,1.0,0.39318759441375734,0.3059999774209718,0
+qPw5D0Xahv,Minimax Based  Fast-training Defense against Adversarial Policy in Two-player Competitive Games,3.5,0.75,0.0,1.0,0.3955432653427124,0.001966511983233954,0
+RlpJmARXqj,Adaptive Self-Supervised Learning Strategies for Dynamic On-Device LLM Personalization,3.5,0.75,0.0,1.0,0.38903839588165284,0.0018970690009780912,0
+MWSoYGPexK,Towards Efficient and Scalable Multi-agent Reasoning via Bayesian Nash Equilibrium,5.5,3.25,0.6761283906917077,1.0,0.30669755935668946,0.37793922389688034,0
+N0MnPLK6r7,Toward Human-Interpretable Explanations in a Unified Framework for GNNs,4.0,1.0,0.5460075613079087,1.0,0.3197972893714905,0.009251727586123384,0
+Uc3kog3O45,Global Context-aware Representation Learning for Spatially Resolved Transcriptomics,5.75,0.1875,0.6000614461347553,1.0,0.4590781211853027,0.6320125311667603,0
+gV0Moskp7k,Combating the Generalization-Forgetting Trade-off in Continual Learning: A Cautious Passive Low-Rank Approach,4.4,1.44,1.0,1.0,0.3162128567695618,0.022098096484407706,0
+amDkNPVWcn,Denoising Autoregressive Transformers for Scalable Text-to-Image Generation,6.2,0.96,0.6917744759287107,1.0,0.3613088130950928,0.9332283128930275,1
+pwNIOcr8fU,Towards Syn-to-Real IQA: A Novel Perspective on Reshaping Synthetic Data Distributions,5.8,0.16,0.6327796196569825,1.0,0.4349591851234436,0.6811531668383829,0
+5YRw1m6GSz,Personalized Federated Learning via Tailored Lorentz Space,5.4,1.44,0.8522576064658554,1.0,0.39496560096740724,0.22940479648852433,0
+hKcDOfDxgn,Brain-Like Replay Naturally Emerges in Reinforcement Learning Agents,3.75,1.6875,0.0,1.0,0.4202951669692993,0.003393045980719451,0
+VxJjw52dZu,LION: A bidirectional framework that trains like a Transformer and infers like an RNN,4.75,4.1875,0.0203972035973077,1.0,0.3343812823295593,0.012913676432320685,0
+XK5jYtLMXl,Convergence Of Consistency Model With Multistep Sampling Under General Data Assumptions,5.5,0.25,0.6936720762706459,1.0,0.4098422646522522,0.35860972316931067,0
+uMLeOlzlZ2,LLaMP: Large Language Model Made Powerful for High-fidelity Materials Knowledge Retrieval,5.0,9.5,0.6643731948914788,1.0,0.41066505908966067,0.027224664493259373,0
+Kh5OS3oNlg,PARSE-Ego4D: Personal Action Recommendation Suggestions for Ego-Centric Videos,5.5,0.25,0.6766640782165891,1.0,0.3455672025680542,0.33741012099575135,0
+YAf7MSsdTu,"Local-Global Shortest Path Algorithms on Random Graphs, Enhanced with GNNs",5.0,8.666666666666666,0.4079980737084606,1.0,0.41704621315002444,0.01564004976244914,0
+DTqx3iqjkz,Convergence and Implicit Bias of Gradient Descent on Continual Linear Classification,6.25,1.1875,0.3397684109539568,1.0,0.36336594820022583,0.9494536239935235,1
+U49N5V51rU,A Formal Framework for Understanding Length Generalization in Transformers,6.8,0.96,0.3659068678765336,1.0,0.34248441457748413,0.9885947643595093,1
+zHeHIIFQVF,Train once and generalize: Zero-shot quantum state preparation with RL,4.333333333333333,1.8888888888888888,0.3535255220546139,1.0,0.45945444107055666,0.015735410294057964,0
+06ZvHHBR0i,Adversarial Multi-Agent Evaluation of Large Language Models through Iterative Debate,2.5,0.75,0.0,1.0,0.3137452483177185,0.00020050093458294486,0
+zpDGwcmMV4,"Physics of Language Models: Part 2.2, How to Learn From Mistakes on Grade-School Math Problems",6.75,1.6875,0.9367056884822202,1.0,0.31967613697052,0.9897819914330092,1
+j0KjevdhkH,SIG: Self-Interpretable Graph Neural Network for Continuous-time Dynamic Graphs,5.0,0.0,1.0,1.0,0.353175687789917,0.058626963734941265,0
+9Y6QWwQhF3,FoREST: Frame of Reference Evaluation in Spatial Reasoning Tasks,4.25,1.6875,0.9119178105885788,1.0,0.39654226303100587,0.019258822637551357,0
+ywFOSIT9ik,Revisiting Zeroth-Order Optimization:  Minimum-Variance Two-Point Estimators and  Directionally Aligned Perturbations,6.8,0.96,1.0,1.0,0.3906301140785217,0.9932507841872162,1
+75PhjtbBdr,Multi-Label Test-Time Adaptation with Bound Entropy Minimization,6.25,1.1875,1.0,1.0,0.40185133218765257,0.9374216644283214,1
+6VuTXirQIv,Feature Driven Graph Coarsening for Scaling Graph Representation Learning,4.75,1.1875,0.4950192087123954,1.0,0.35663074254989624,0.05153200866750823,0
+itwyfJilM5,Graph Scattering Networks with Adaptive Diffusion Kernels,4.4,1.44,0.6103269101852524,1.0,0.45679274797439573,0.024054225238423068,0
+Rg2JxBZZ0g,GeneMamba: Early Parkinson’s Detection via Wearable Device and Genetic Data,3.6666666666666665,0.8888888888888888,0.6131537503472078,1.0,0.516347348690033,0.0050980052495372494,0
+vWRwdmA3wU,Differentiable Optimization of Similarity Scores Between Models and Brains,6.25,1.1875,0.5412037062149564,1.0,0.4030046582221985,0.9471111789166112,1
+FtjLUHyZAO,Diffusion Generative Modeling for Spatially Resolved Gene Expression Inference from Histology Images,6.666666666666667,0.8888888888888888,0.834629117418263,1.0,0.46425949335098265,0.982541615912343,1
+MF7ljU8xcf,Compute-Optimal LLMs Provably Generalize Better with Scale,6.0,1.2,0.3484389899200579,1.0,0.3324208617210388,0.881995495408754,1
+Wb6Mcmo0ch,SHARP: Accelerating Language Model Inference by SHaring Adjacent layers with Recovery Parameters,4.75,1.1875,0.8889014524529721,1.0,0.32585638761520386,0.04379227414176658,0
+10JOlFIPjt,In vivo cell-type and brain region classification via multimodal contrastive learning,7.5,0.75,0.0,1.0,0.4333093523979187,0.9978436454777173,1
+fv9XU7CyN2,CL-MFAP: A Contrastive Learning-Based Multimodal Foundation Model for Molecular Property Prediction and Antibiotic Screening,5.75,0.1875,0.0727023413067341,1.0,0.4023683190345764,0.5820036189002974,1
+h0pACOIFxC,Meta-Learning Adaptable Foundation Models,4.75,1.1875,0.0,1.0,0.3720390796661377,0.03673495857804686,0
+GlqeLNjH6p,Exploring Complex Trade-offs in Information Bottleneck through Multi-Objective Optimization,3.5,2.75,0.0924847342649437,1.0,0.35196049213409425,0.0021223372906648452,0
+n8h1z588eu,Relax and Merge: A Simple Yet Effective Framework for Solving Fair $k$-Means and $k$-sparse Wasserstein Barycenter Problems,7.0,1.0,0.0663924498262473,1.0,0.49788481593132017,0.9936840820700245,1
+raUnLe0Z04,Lossy Compression with Pretrained Diffusion Models,5.5,0.25,0.9423179494179766,1.0,0.40636812448501586,0.36438772151714727,1
+E36NHwe7Zc,Evaluating Large Language Models through Role-Guide and Self-Reflection: A Comparative Study,6.0,0.0,1.0,1.0,0.42867202758789064,0.7961348822072223,1
+fwHVclv0ij,Online Detection for Black-Box Large Language Models with Adaptive Prompt Selection,5.25,1.6875,0.3985836635313081,1.0,0.3846724271774292,0.11250771511387424,0
+wVTJRnZ11Z,When GNNs meet symmetry in ILPs: an orbit-based feature augmentation approach,6.0,1.5,0.4624605159228647,1.0,0.4543617606163025,0.7739268994638621,1
+8sSqNntaMr,RouteLLM: Learning to Route LLMs from Preference Data,6.333333333333333,1.5555555555555556,0.4920593303145283,1.0,0.32793893814086916,0.9605072182226272,1
+Dl3MsjaIdp,Continual Slow-and-Fast Adaptation of Latent Neural Dynamics (CoSFan): Meta-Learning What-How & When to Adapt,6.75,3.6875,0.4068135275140317,1.0,0.37168159484863283,0.9832802899150227,1
+fvyuKLTC3s,Cayley Maze: Universal Open-Ended Reinforcement Learning Environment,3.75,3.6875,0.6912574463913661,1.0,0.47551398277282714,0.006625887356410388,0
+NcKUcd4EkA,Harnessing Query Heterogeneity for Cost-Effective Proactive Caching in LLM Inference,5.25,1.6875,0.3322025001148623,1.0,0.34170955419540405,0.10901195618348332,0
+EwRxk3Ho1V,Beyond Cosine Similarity: Introducing the Unified semantic Similarity Metric Benchmark (USMB) for Text Similarity Measurement,4.25,1.6875,0.0,1.0,0.364468514919281,0.011322743722979433,0
+TvvT4wjEPf,Towards Practical Large-Scale Privacy-Preserving Recurrent Neural Networks,3.75,1.6875,0.0,1.0,0.40688577890396116,0.0036971315506992004,0
+d159zNCmOq,From Static to Dynamic: Leveraging Implicit Behavioral Models to Facilitate Transition in Offline-to-Online Reinforcement Learning,3.4,0.64,0.5119882015105448,1.0,0.32726460695266724,0.0024185671915858678,0
+yp95goUAT1,SiReRAG: Indexing Similar and Related Information for Multihop Reasoning,6.75,1.6875,0.6698008881748279,1.0,0.3831539750099182,0.9879544400763179,1
+IULlNTZZel,RedHat: Towards Reducing Hallucination in Essay Critiques with Large Language Models,5.333333333333333,4.222222222222222,0.8526867348692552,1.0,0.34504400491714476,0.25069844977896044,0
+9mBodivRIo,LocoVR: Multiuser Indoor Locomotion Dataset in Virtual Reality,5.8,2.56,0.0,1.0,0.40410014390945437,0.5853341461552373,1
+JBXO05r4AV,From Few to Many: Self-Improving Many-Shot Reasoners Through Iterative Optimization and Generation,6.25,1.1875,0.3415958885687746,1.0,0.3068076133728027,0.9233381276157525,1
+Na28j1Drh7,Why Do You Answer Like That? Psychological Analysis on Underlying Connections between LLM's Values and Safety Risks,4.666666666666667,1.5555555555555556,0.0,1.0,0.388737416267395,0.026368296133198844,0
+V5lBNcD65H,MTEEG: A Multi-Task Learning Framework for Enhanced Electroencephalography Analysis Using Low-Rank Adaptation,4.75,1.1875,0.3266392176974815,1.0,0.38555731773376467,0.04986627365396864,0
+pjJIimQdfU,Self-supervised Masked Graph Autoencoder via Structure-aware Curriculum,4.75,1.1875,0.3259895566990807,1.0,0.38477717638015746,0.04414850680404885,0
+VELhv9BBfn,Neural Dueling Bandits: Preference-Based Optimization with Human Feedback,6.25,1.1875,0.579464079726929,1.0,0.2924311637878418,0.9077962113446505,1
+p0DjhjPXl3,Stealthy Shield Defense: A Conditional Mutual Information-Based Approach against Black-Box Model Inversion Attacks,6.0,0.0,0.2519618664651042,1.0,0.38298245668411257,0.8339373111836946,1
+jqff3wzkLT,Variance-Covariance Regularization Improves Representation Learning,4.333333333333333,0.8888888888888888,0.0210856264118548,1.0,0.36188817024230957,0.013706290133888173,0
+9Ieq8jQNAl,Reward Learning from Multiple Feedback Types,6.25,4.1875,1.0,1.0,0.32957258224487307,0.8192833469991929,1
+DzKdjWe59v,Hint Marginalization for Improved Reasoning in Large Language Models,5.75,0.1875,0.0,1.0,0.30115673542022703,0.396601067923792,0
+yzloNYH3QN,Attention in Large Language Models Yields Efficient Zero-Shot Re-Rankers,5.0,1.5,0.5565480235745581,1.0,0.32877148389816285,0.07008184406795419,1
+tGYFikNONB,Holographic Node Representations: Pre-training Task-Agnostic Node Embeddings,7.0,1.0,0.0,1.0,0.41319587230682375,0.9900678624224928,1
+Kwo20MWWCb,An Asynchronous Bundle Method for Distributed Learning Problems,7.0,1.0,0.8529221265639984,1.0,0.5139425039291382,0.9938760936447208,1
+Y4aWwRh25b,Follow My Instruction and Spill the Beans: Scalable Data Extraction from Retrieval-Augmented Generation Systems,6.75,1.6875,0.8541024094823567,1.0,0.360299551486969,0.9879253541816907,1
+ig2wk7kK9J,SafeDiffuser: Safe Planning with Diffusion Probabilistic Models,6.75,1.6875,0.9743214161418432,1.0,0.4343725800514221,0.9889288949027784,1
+Q1QTxFm0Is,Underdamped Diffusion Bridges with Applications to Sampling,6.8,0.96,0.7669377953193868,1.0,0.3338713765144348,0.9900805919751834,1
+Z7aq3djHZw,JPEG-LM: LLMs as Image Generators with Canonical Codec Representations,6.25,1.1875,0.0,1.0,0.4148571014404297,0.908643241239087,0
+XmProj9cPs,Spider 2.0: Evaluating Language Models on Real-World Enterprise Text-to-SQL Workflows,8.0,0.0,0.9611397019903528,1.0,0.39084309339523315,0.9997782047699912,1
+XgH1wfHSX8,Competition Dynamics Shape Algorithmic Phases of In-Context Learning,7.5,2.75,0.6063868614400705,1.0,0.3242555260658264,0.9986686653756297,1
+DKgAFfCs5F,Cocoon: Robust Multi-Modal Perception with Uncertainty-Aware Sensor Fusion,6.0,0.0,0.0,1.0,0.4126346826553345,0.8441453733841159,1
+ohJxgRLlLt,Large (Vision) Language Models are Unsupervised In-Context Learners,5.75,0.1875,0.5171531711299788,1.0,0.3087522864341736,0.6084717327561531,1
+1qq1QJKM5q,More Experts Than Galaxies: Conditionally-Overlapping Experts with Biologically-Inspired Fixed Routing,5.666666666666667,4.222222222222222,0.5533446711440595,1.0,0.3564715623855591,0.35027079643646614,1
+RWJX5F5I9g,Brain Bandit: A Biologically Grounded Neural Network for Efficient Control of Exploration,8.0,0.0,1.0,1.0,0.33101644515991213,0.9998288091267307,1
+miOYgWl60q,Multimodal Depression Detection with Contextual Position Encoding and Latent Space Regularization,4.25,1.6875,0.5446408865116177,1.0,0.4599316954612732,0.01760566168817164,0
+VNMJfBBUd5,Activation Gradient based Poisoned Sample Detection Against Backdoor Attacks,6.0,0.0,0.218858360386449,1.0,0.41993988752365113,0.8652080581949597,1
+vJgJSrYPe1,Logic-Logit: A Logic-Based Approach to Choice Modeling,5.5,0.25,0.9020021811103712,1.0,0.46503018140792846,0.2962286055437423,1
