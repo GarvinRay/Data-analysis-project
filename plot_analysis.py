@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Visualization script for Meta-AC probability adjustments.
+Evaluation plots for Meta-AC classifier: ROC curve and confusion matrix.
 """
 
 from __future__ import annotations
@@ -13,83 +13,56 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
+from sklearn.metrics import auc, confusion_matrix, roc_curve
 
-DATA_PATH = Path("meta_ac_predictions.csv")
-OUTPUT_PATH = Path("meta_ac_impact.png")
+from meta_ac.config import OUTPUT_DIR, PREDICTIONS_PATH
+
+DATA_PATH = PREDICTIONS_PATH
+OUTPUT_PATH = OUTPUT_DIR / "meta_ac_eval.png"
 
 
 def load_predictions(path: Path) -> pd.DataFrame:
     if not path.exists():
         raise FileNotFoundError(f"Prediction CSV not found: {path}")
     df = pd.read_csv(path)
-    expected_columns = {"raw_avg", "variance", "final_prob"}
-    missing = expected_columns - set(df.columns)
-    if missing:
-        raise ValueError(f"CSV missing required columns: {missing}")
-    if "sentiment_change" not in df.columns:
-        df["sentiment_change"] = 0.0
+    required = {"probability", "label"}
+    if not required.issubset(df.columns):
+        raise ValueError(f"Prediction CSV missing required columns: {required - set(df.columns)}")
     return df
-
-
-def normalize_raw_scores(df: pd.DataFrame) -> pd.Series:
-    """
-    Normalize raw average ratings into [0, 1], assuming 0-10 scale.
-    """
-    return df["raw_avg"] / 10.0
-
-
-def annotate_top_deltas(ax, df: pd.DataFrame, delta_col: str, top_n: int = 3):
-    """
-    Annotate the top-N papers with the largest probability adjustments.
-    """
-    top_rows = df.nlargest(top_n, delta_col)
-    for _, row in top_rows.iterrows():
-        ax.annotate(
-            row.get("title", "Paper"),
-            (row["raw_avg"], row["final_prob"]),
-            textcoords="offset points",
-            xytext=(5, 5),
-            ha="left",
-            fontsize=9,
-            bbox=dict(boxstyle="round,pad=0.2", fc="white", alpha=0.7),
-        )
 
 
 def main() -> None:
     sns.set_theme(style="whitegrid", context="talk")
     df = load_predictions(DATA_PATH)
-    df = df.dropna(subset=["raw_avg", "final_prob"]).copy()
+    y_true = df["label"].to_numpy()
+    y_score = df["probability"].to_numpy()
 
-    df["raw_norm"] = normalize_raw_scores(df)
-    df["sentiment_change"] = df.get("sentiment_change", 0.0)
-    df["delta"] = df["final_prob"] - df["raw_norm"]
+    fpr, tpr, _ = roc_curve(y_true, y_score)
+    roc_auc = auc(fpr, tpr)
 
-    plt.figure(figsize=(10, 7))
-    scatter = plt.scatter(
-        df["raw_avg"],
-        df["final_prob"],
-        c=df["variance"].fillna(0.0),
-        cmap="Reds",
-        s=50 + 200 * df["sentiment_change"].fillna(0.0).clip(lower=0.0),
-        alpha=0.8,
-        edgecolor="k",
-    )
-    cbar = plt.colorbar(scatter)
-    cbar.set_label("Rating Variance", rotation=270, labelpad=15)
+    y_pred = (y_score >= 0.5).astype(int)
+    cm = confusion_matrix(y_true, y_pred)
 
-    # Reference line representing raw score ≈ probability
-    x_vals = np.linspace(df["raw_avg"].min(), df["raw_avg"].max(), 100)
-    plt.plot(x_vals, x_vals / 10.0, linestyle="--", color="gray", label="Raw Score = Probability")
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-    annotate_top_deltas(plt.gca(), df, "delta", top_n=3)
+    # ROC curve
+    axes[0].plot(fpr, tpr, label=f"AUC = {roc_auc:.3f}", color="C0")
+    axes[0].plot([0, 1], [0, 1], linestyle="--", color="gray")
+    axes[0].set_xlabel("False Positive Rate")
+    axes[0].set_ylabel("True Positive Rate")
+    axes[0].set_title("ROC Curve")
+    axes[0].legend()
 
-    plt.xlabel("Raw Avg Rating")
-    plt.ylabel("Meta-AC Probability")
-    plt.title("Meta-AC Adjustments vs. Raw Ratings")
-    plt.legend()
+    # Confusion matrix
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False, ax=axes[1])
+    axes[1].set_xlabel("Predicted")
+    axes[1].set_ylabel("Actual")
+    axes[1].set_title("Confusion Matrix (threshold=0.5)")
+
     plt.tight_layout()
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(OUTPUT_PATH, dpi=300)
-    print(f"Saved plot to {OUTPUT_PATH}")
+    print(f"Saved evaluation plot to {OUTPUT_PATH}")
 
 
 if __name__ == "__main__":
