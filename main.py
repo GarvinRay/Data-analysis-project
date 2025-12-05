@@ -19,10 +19,8 @@ from sklearn.preprocessing import StandardScaler
 from tqdm import tqdm
 
 from agents import ArgumentAgent, BayesianAgent
+from meta_ac.config import JSON_PATH, PREDICTIONS_PATH, STATS_PATH
 from meta_ac.models import PaperRecord
-
-CSV_PATH = Path("meta_ac_stats_sampled.csv")
-JSON_PATH = Path("meta_ac_dataset_sampled.json")
 
 
 def load_data_frame(path: Path) -> pd.DataFrame:
@@ -140,8 +138,11 @@ def train_and_evaluate(
 
 
 def main() -> None:
-    df = load_data_frame(CSV_PATH)
-    records = load_json_records(JSON_PATH)
+    df_path = STATS_PATH if STATS_PATH.exists() else STATS_PATH.name
+    json_path = JSON_PATH if JSON_PATH.exists() else JSON_PATH.name
+
+    df = load_data_frame(Path(df_path))
+    records = load_json_records(Path(json_path))
     merged = merge_sources(df, records)
     if not merged:
         raise RuntimeError("No merged records were available.")
@@ -161,8 +162,9 @@ def main() -> None:
         "probability": probs,
         "label": y,
     })
-    results.to_csv("final_predictions.csv", index=False)
-    print("Saved predictions to final_predictions.csv")
+    PREDICTIONS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    results.to_csv(PREDICTIONS_PATH, index=False)
+    print(f"Saved predictions to {PREDICTIONS_PATH}")
 
 
 def _safe_float(value: Any) -> float | None:

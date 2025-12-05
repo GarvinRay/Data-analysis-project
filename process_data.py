@@ -17,6 +17,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import pandas as pd
 
+from meta_ac.config import JSON_PATH, PROCESSED_DIR, RAW_DIR, STATS_PATH
 from meta_ac.models import PaperRecord, ReviewRebuttalPair
 
 
@@ -93,7 +94,13 @@ def parse_source(value: str) -> Tuple[Path, int]:
 def load_sources(args: argparse.Namespace) -> List[Tuple[Path, int]]:
     if args.input:
         return [parse_source(item) for item in args.input]
-    return [(Path(path), label) for path, label in DEFAULT_SOURCES]
+    sources: List[Tuple[Path, int]] = []
+    for fname, label in DEFAULT_SOURCES:
+        candidate = RAW_DIR / fname
+        if not candidate.exists():
+            candidate = Path(fname)
+        sources.append((candidate, label))
+    return sources
 
 
 def extract_value(payload: Any) -> Any:
@@ -431,10 +438,12 @@ def main() -> None:
     print("Selected: " + ", ".join(summary_parts))
 
     json_records = [record.to_dict() for record in sampled_records]
+    args.json_output.parent.mkdir(parents=True, exist_ok=True)
     with args.json_output.open("w", encoding="utf-8") as outfile:
         json.dump(json_records, outfile, ensure_ascii=False, indent=2)
 
     stats_df = build_stats_dataframe(sampled_records)
+    args.csv_output.parent.mkdir(parents=True, exist_ok=True)
     stats_df.to_csv(args.csv_output, index=False)
 
     print(
@@ -444,4 +453,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    # Default outputs point to processed dir; override argparse defaults here.
+    DEFAULT_JSON = JSON_PATH
+    DEFAULT_CSV = STATS_PATH
     main()
