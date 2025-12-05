@@ -14,6 +14,7 @@ import pandas as pd
 from tqdm import tqdm
 
 from agents import ArgumentAgent, BayesianAgent, MetaAC
+from meta_ac.models import PaperRecord
 
 
 CSV_PATH = Path("meta_ac_stats_sampled.csv")
@@ -26,23 +27,24 @@ def load_data_frame(path: Path) -> pd.DataFrame:
     return pd.read_csv(path)
 
 
-def load_json_records(path: Path) -> List[Dict]:
+def load_json_records(path: Path) -> List[PaperRecord]:
     if not path.exists():
         raise FileNotFoundError(f"JSON file not found: {path}")
     with path.open("r", encoding="utf-8") as infile:
-        return json.load(infile)
+        payload = json.load(infile)
+    return [PaperRecord.from_dict(item) for item in payload]
 
 
 def merge_sources(
-    df: pd.DataFrame, records: Sequence[Dict]
-) -> List[Tuple[pd.Series, Dict]]:
+    df: pd.DataFrame, records: Sequence[PaperRecord]
+) -> List[Tuple[pd.Series, PaperRecord]]:
     """
     Align CSV rows with JSON records using paper_id; fall back to index order.
     """
     record_lookup = {
-        record.get("paper_id"): record for record in records if record.get("paper_id")
+        record.paper_id: record for record in records if record.paper_id
     }
-    merged: List[Tuple[pd.Series, Dict]] = []
+    merged: List[Tuple[pd.Series, PaperRecord]] = []
     for idx, row in df.iterrows():
         paper_id = row.get("paper_id")
         record = record_lookup.get(paper_id)
@@ -55,12 +57,12 @@ def merge_sources(
 
 
 def display_report(
-    row: pd.Series, record: Dict, text_result: Dict, meta_result: Dict
+    row: pd.Series, record: PaperRecord, text_result: Dict, meta_result: Dict
 ) -> None:
-    title = record.get("title") or f"Paper {record.get('paper_id')}"
+    title = record.title or f"Paper {record.paper_id}"
     decision_value = row.get("decision")
     if pd.isna(decision_value):
-        decision_value = record.get("decision")
+        decision_value = record.decision
     decision_label = _format_decision(decision_value)
     avg_rating = row.get("avg_rating", "N/A")
     print(f"=== Paper: {title} ===")
@@ -127,7 +129,7 @@ def main() -> None:
 
     for row, record in tqdm(merged, desc="Processing papers", unit="paper"):
         try:
-            pairs = record.get("review_rebuttal_pairs") or []
+            pairs = [pair.to_dict() for pair in record.review_rebuttal_pairs]
             first_pair = pairs[0] if pairs else {}
             if first_pair:
                 if use_live_llm and hasattr(arg, "analyze_pair"):
@@ -142,10 +144,10 @@ def main() -> None:
 
             decision_value = row.get("decision")
             if pd.isna(decision_value):
-                decision_value = record.get("decision")
+                decision_value = record.decision
             results_buffer.append(
                 {
-                    "title": record.get("title"),
+                    "title": record.title,
                     "raw_avg": row.get("avg_rating"),
                     "variance": row.get("rating_variance"),
                     "final_prob": meta_result["final_probability"],
@@ -153,7 +155,7 @@ def main() -> None:
                 }
             )
         except Exception as exc:
-            title = record.get("title") or record.get("paper_id")
+            title = record.title or record.paper_id
             print(f"Error processing '{title}': {exc}")
             continue
 

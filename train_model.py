@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from typing import Dict, List, Tuple
 
 import joblib
 import numpy as np
@@ -17,6 +18,7 @@ from sklearn.metrics import accuracy_score, f1_score
 from sklearn.model_selection import train_test_split
 
 from agents import ArgumentAgent, BayesianAgent
+from meta_ac.models import PaperRecord
 
 
 def parse_args() -> argparse.Namespace:
@@ -24,13 +26,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--stats-path",
         type=Path,
-        default=Path("meta_ac_stats.csv"),
+        default=Path("meta_ac_stats_sampled.csv"),
         help="CSV with quantitative features (default: %(default)s).",
     )
     parser.add_argument(
         "--predictions-path",
         type=Path,
-        default=Path("meta_ac_predictions.csv"),
+        default=Path("final_predictions.csv"),
         help="CSV with Meta-AC prediction details (default: %(default)s).",
     )
     parser.add_argument(
@@ -42,7 +44,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dataset-path",
         type=Path,
-        default=Path("meta_ac_dataset.json"),
+        default=Path("meta_ac_dataset_sampled.json"),
         help="JSON corpus used to recompute sentiment if needed.",
     )
     return parser.parse_args()
@@ -80,7 +82,10 @@ def load_predictions(
             raw_preds["paper_id"] = stats_df.loc[: len(raw_preds) - 1, "paper_id"].values
         preds_df = preds_df.merge(raw_preds, on="paper_id", how="left")
 
-    if "sentiment_score" not in preds_df.columns or preds_df["sentiment_score"].isna().all():
+    if (
+        "sentiment_score" not in preds_df.columns
+        or preds_df["sentiment_score"].isna().all()
+    ):
         sentiment_df = recompute_sentiments(stats_df, dataset_path)
         preds_df = preds_df.drop(columns=[col for col in ["sentiment_score"] if col in preds_df])
         preds_df = preds_df.merge(sentiment_df, on="paper_id", how="left")
@@ -92,22 +97,37 @@ def load_predictions(
 
 
 
+def load_dataset_records(dataset_path: Path) -> Dict[str, PaperRecord]:
+    if not dataset_path.exists():
+        raise FileNotFoundError(
+            f"Dataset JSON not found at {dataset_path}; cannot recompute sentiment scores."
+        )
+    with dataset_path.open("r", encoding="utf-8") as infile:
+        payload = json.load(infile)
+    records = [PaperRecord.from_dict(item) for item in payload]
+    return {
+        record.paper_id: record
+        for record in records
+        if record.paper_id
+    }
+
+
 def recompute_sentiments(stats_df: pd.DataFrame, dataset_path: Path) -> pd.DataFrame:
     if not dataset_path.exists():
         raise FileNotFoundError(
             f"Dataset JSON not found at {dataset_path}; "
             "cannot recompute sentiment scores."
         )
-    with dataset_path.open("r", encoding="utf-8") as infile:
-        records = json.load(infile)
-    record_lookup = {
-        record.get("paper_id"): record for record in records if record.get("paper_id")
-    }
+    record_lookup = load_dataset_records(dataset_path)
     argument_agent = ArgumentAgent()
     sentiment_rows = []
     for paper_id in stats_df["paper_id"]:
-        record = record_lookup.get(paper_id, {})
-        pairs = record.get("review_rebuttal_pairs") if record else None
+        paper = record_lookup.get(paper_id)
+        pairs = (
+            [pair.to_dict() for pair in paper.review_rebuttal_pairs]
+            if paper
+            else None
+        )
         first_pair = pairs[0] if pairs else None
         if first_pair:
             result = argument_agent.analyze_pair(first_pair)
@@ -119,15 +139,35 @@ def recompute_sentiments(stats_df: pd.DataFrame, dataset_path: Path) -> pd.DataF
     return pd.DataFrame(sentiment_rows)
 
 
+def normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
+    mapping = {
+        "avg_rating": ["avg_rating_stats", "avg_rating"],
+        "rating_variance": ["rating_variance_stats", "rating_variance"],
+        "num_reviews": ["num_reviews_stats", "num_reviews"],
+        "confidence_weighted_avg": [
+            "confidence_weighted_avg_stats",
+            "confidence_weighted_avg",
+        ],
+    }
+    normalized = df.copy()
+    for target, candidates in mapping.items():
+        for col in candidates:
+            if col in normalized.columns:
+                normalized[target] = normalized[col]
+                break
+    return normalized
+
+
 def prepare_features(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
-    required_cols = [
+    df = normalize_columns(df)
+    required_columns = [
         "avg_rating",
         "rating_variance",
         "num_reviews",
         "confidence_weighted_avg",
         "sentiment_score",
     ]
-    missing = [col for col in required_cols if col not in df.columns]
+    missing = [col for col in required_columns if col not in df.columns]
     if missing:
         raise ValueError(f"Missing required columns: {missing}")
 

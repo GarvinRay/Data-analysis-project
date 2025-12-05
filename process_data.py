@@ -7,8 +7,8 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import random
+import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
@@ -16,6 +16,14 @@ from statistics import mean, pvariance
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import pandas as pd
+
+from meta_ac.models import PaperRecord, ReviewRebuttalPair
+
+
+@dataclass
+class CategorizedRecord:
+    record: PaperRecord
+    category: str
 
 
 DEFAULT_SOURCES: List[Tuple[str, int]] = [
@@ -149,25 +157,6 @@ def build_review_text(content: Dict[str, Any]) -> str:
     return "\n\n".join(pieces).strip()
 
 
-@dataclass
-class PaperRecord:
-    paper_id: Optional[str]
-    decision: int
-    title: Optional[str]
-    abstract_raw: str
-    abstract_clean: str
-    keywords: List[str]
-    url: Optional[str]
-    ratings: List[float]
-    confidences: List[float]
-    avg_rating: Optional[float]
-    rating_variance: Optional[float]
-    confidence_weighted_avg: Optional[float]
-    num_reviews: int
-    num_rebuttals: int
-    review_rebuttal_pairs: List[Dict[str, Any]]
-
-
 def parse_paper(entry: Dict[str, Any], decision: int) -> Optional[PaperRecord]:
     if not isinstance(entry, dict):
         return None
@@ -186,7 +175,9 @@ def parse_paper(entry: Dict[str, Any], decision: int) -> Optional[PaperRecord]:
     abstract_raw = extract_value(meta_content.get("abstract")) or ""
     abstract_clean = clean_text(abstract_raw)
     keywords = normalize_keywords(meta_content.get("keywords"))
-    url = entry.get("url") or (f"https://openreview.net/forum?id={paper_id}" if paper_id else None)
+    url = entry.get("url") or (
+        f"https://openreview.net/forum?id={paper_id}" if paper_id else None
+    )
 
     review_data = parse_reviews(notes)
 
@@ -213,12 +204,18 @@ def parse_reviews(notes: List[Dict[str, Any]]) -> Dict[str, Any]:
     review_notes = [
         note
         for note in notes
-        if any("Official_Review" in invitation for invitation in note.get("invitations", []))
+        if any(
+            "Official_Review" in invitation
+            for invitation in note.get("invitations", [])
+        )
     ]
     comment_notes = [
         note
         for note in notes
-        if any("Official_Comment" in invitation for invitation in note.get("invitations", []))
+        if any(
+            "Official_Comment" in invitation
+            for invitation in note.get("invitations", [])
+        )
     ]
 
     # Group official comments by the review (replyto) they answer so we can pair them.
@@ -232,7 +229,7 @@ def parse_reviews(notes: List[Dict[str, Any]]) -> Dict[str, Any]:
     ratings: List[float] = []
     confidences: List[float] = []
     weighted_entries: List[Tuple[float, float]] = []
-    pairs: List[Dict[str, Any]] = []
+    pairs: List[ReviewRebuttalPair] = []
     rebuttal_count = 0
 
     for review in review_notes:
@@ -258,23 +255,25 @@ def parse_reviews(notes: List[Dict[str, Any]]) -> Dict[str, Any]:
                 rebuttal_text = extract_value(reply.get("content", {}).get("comment"))
                 rebuttal_count += 1
                 pairs.append(
-                    {
-                        "review_id": review.get("id"),
-                        "reviewer_id": reviewer_id,
-                        "review_text": review_text,
-                        "rebuttal_text": rebuttal_text.strip() if isinstance(rebuttal_text, str) else None,
-                        "rating": rating,
-                    }
+                    ReviewRebuttalPair(
+                        review_id=review.get("id"),
+                        reviewer_id=reviewer_id,
+                        review_text=review_text,
+                        rebuttal_text=rebuttal_text.strip()
+                        if isinstance(rebuttal_text, str)
+                        else None,
+                        rating=rating,
+                    )
                 )
         else:
             pairs.append(
-                {
-                    "review_id": review.get("id"),
-                    "reviewer_id": reviewer_id,
-                    "review_text": review_text,
-                    "rebuttal_text": None,
-                    "rating": rating,
-                }
+                ReviewRebuttalPair(
+                    review_id=review.get("id"),
+                    reviewer_id=reviewer_id,
+                    review_text=review_text,
+                    rebuttal_text=None,
+                    rating=rating,
+                )
             )
 
     avg_rating = float(mean(ratings)) if ratings else None
@@ -305,40 +304,18 @@ def parse_reviews(notes: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
-def record_to_dict(record: PaperRecord) -> Dict[str, Any]:
-    return {
-        "paper_id": record.paper_id,
-        "decision": record.decision,
-        "title": record.title,
-        "abstract_raw": record.abstract_raw,
-        "abstract_clean": record.abstract_clean,
-        "keywords": record.keywords,
-        "url": record.url,
-        "ratings": record.ratings,
-        "confidences": record.confidences,
-        "avg_rating": record.avg_rating,
-        "rating_variance": record.rating_variance,
-        "confidence_weighted_avg": record.confidence_weighted_avg,
-        "num_reviews": record.num_reviews,
-        "num_rebuttals": record.num_rebuttals,
-        "review_rebuttal_pairs": record.review_rebuttal_pairs,
-    }
-
-
 def build_stats_dataframe(records: Iterable[PaperRecord]) -> pd.DataFrame:
     rows = []
     for record in records:
-        rows.append(
-            {
-                "paper_id": record.paper_id,
-                "decision": record.decision,
-                "avg_rating": record.avg_rating,
-                "rating_variance": record.rating_variance,
-                "confidence_weighted_avg": record.confidence_weighted_avg,
-                "num_reviews": record.num_reviews,
-                "num_rebuttals": record.num_rebuttals,
-            }
-        )
+        rows.append({
+            "paper_id": record.paper_id,
+            "decision": record.decision,
+            "avg_rating": record.avg_rating,
+            "rating_variance": record.rating_variance,
+            "confidence_weighted_avg": record.confidence_weighted_avg,
+            "num_reviews": record.num_reviews,
+            "num_rebuttals": record.num_rebuttals,
+        })
     return pd.DataFrame(rows)
 
 
@@ -392,30 +369,28 @@ def allocate_counts(group_counts: Dict[str, int], target_total: int) -> Dict[str
 
 
 def stratified_sample(
-    records: List[Dict[str, Any]], total_samples: int, seed: int
-) -> List[Dict[str, Any]]:
+    records: List[CategorizedRecord], total_samples: int, seed: int
+) -> List[CategorizedRecord]:
     rng = random.Random(seed)
-    accepts = [item for item in records if item["record"].decision == 1]
-    rejects = [item for item in records if item["record"].decision == 0]
+    accepts = [item for item in records if item.record.decision == 1]
+    rejects = [item for item in records if item.record.decision == 0]
 
     target_accepts = min(len(accepts), total_samples // 2)
     target_rejects = min(len(rejects), total_samples - target_accepts)
 
-    accept_groups: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    accept_groups: Dict[str, List[CategorizedRecord]] = defaultdict(list)
     for item in accepts:
-        accept_groups[item["category"]].append(item)
+        accept_groups[item.category].append(item)
 
     group_counts = {k: len(v) for k, v in accept_groups.items()}
     allocations = allocate_counts(group_counts, target_accepts)
 
-    sampled_accepts: List[Dict[str, Any]] = []
+    sampled_accepts: List[CategorizedRecord] = []
     for category, count in allocations.items():
         if count > 0 and len(accept_groups[category]) >= count:
             sampled_accepts.extend(rng.sample(accept_groups[category], count))
 
-    sampled_rejects = (
-        rng.sample(rejects, target_rejects) if target_rejects > 0 else []
-    )
+    sampled_rejects = rng.sample(rejects, target_rejects) if target_rejects > 0 else []
 
     selected = sampled_accepts + sampled_rejects
     return selected
@@ -425,7 +400,7 @@ def main() -> None:
     args = parse_args()
     sources = load_sources(args)
 
-    records_with_meta: List[Dict[str, Any]] = []
+    records_with_meta: List[CategorizedRecord] = []
     for path, label in sources:
         if not path.exists():
             raise FileNotFoundError(f"Input file {path} not found.")
@@ -435,18 +410,15 @@ def main() -> None:
             record = parse_paper(entry, label)
             if record:
                 records_with_meta.append(
-                    {
-                        "record": record,
-                        "category": infer_category(path, label),
-                    }
+                    CategorizedRecord(
+                        record=record, category=infer_category(path, label)
+                    )
                 )
 
-    sampled = stratified_sample(
-        records_with_meta, args.total_samples, seed=args.seed
-    )
-    sampled_records = [item["record"] for item in sampled]
+    sampled = stratified_sample(records_with_meta, args.total_samples, seed=args.seed)
+    sampled_records = [item.record for item in sampled]
 
-    count_summary = Counter(item["category"] for item in sampled)
+    count_summary = Counter(item.category for item in sampled)
     display_names = {
         "oral": "Oral",
         "spotlight": "Spotlight",
@@ -458,7 +430,7 @@ def main() -> None:
         summary_parts.append(f"{count_summary.get(key, 0)} {display_names[key]}")
     print("Selected: " + ", ".join(summary_parts))
 
-    json_records = [record_to_dict(record) for record in sampled_records]
+    json_records = [record.to_dict() for record in sampled_records]
     with args.json_output.open("w", encoding="utf-8") as outfile:
         json.dump(json_records, outfile, ensure_ascii=False, indent=2)
 
