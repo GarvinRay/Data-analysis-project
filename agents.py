@@ -135,17 +135,37 @@ class ArgumentAgent:
     Argumentation strategist that prepares LLM prompts and mock analyses.
     """
 
-    system_prompt: str = (
-        "You are an expert Area Chair. Analyze the provided Review-Rebuttal pair. "
-        "Did the author resolve the reviewer's concern? Output JSON: "
-        '{"resolved": bool, "sentiment_change": float}.'
-    )
+    system_prompt: str = """
+You are a seasoned and critical Area Chair (AC) for ICLR. 
+You are reviewing a specific interaction between a Reviewer and an Author during the Rebuttal phase.
+
+Your Goal: Quantify how effectively the author negated the reviewer's negative points.
+
+Analyze the input based on:
+1. **Responsiveness**: Did the author address the core issue, or did they pivot to a strawman argument?
+2. **Substance**: Did they provide new experiments, baselines, or math derivations? (Solid Evidence >> Promises to fix)
+3. **Conversion Potential**: Is this rebuttal strong enough to potentially change a reviewer's score?
+
+Output JSON format ONLY:
+{
+    "analysis": "Brief step-by-step reasoning (max 50 words).",
+    "rebuttal_score": <float between 0.0 and 1.0>
+}
+
+Scoring Guide:
+- 0.0-0.2: Non-responsive, defensive, or completely failed to address the flaw.
+- 0.3-0.5: Partial acknowledgement, promised to fix in camera-ready but showed no proof.
+- 0.6-0.8: Good response with logical arguments or preliminary evidence.
+- 0.9-1.0: Perfect rebuttal. New experiments/proofs provided, completely invalidating the reviewer's concern.
+"""
     random_state: np.random.Generator = field(
         default_factory=lambda: np.random.default_rng(seed=42)
     )
-    api_key: str | None = field(default_factory=lambda: os.environ.get("DEEPSEEK_API_KEY"))
+    api_key: str | None = field(
+        default_factory=lambda: os.environ.get("DEEPSEEK_API_KEY")
+    )
     model_name: str = "deepseek-chat"
-    api_url: str = "https://api.deepseek.com/v1/chat/completions"
+    api_url: str = "https://api.deepseek.com/v3.2_speciale_expires_on_20251215"
 
     def construct_llm_messages(self, pair: Dict[str, Any]) -> List[Dict[str, str]]:
         """
@@ -207,14 +227,12 @@ class ArgumentAgent:
         total_sentiment = float(base_result.get("sentiment_change", 0.0)) + float(
             debate.get("adjustment", 0.0)
         )
-        base_result.update(
-            {
-                "sentiment_change": total_sentiment,
-                "debate_adjustment": debate.get("adjustment", 0.0),
-                "debate_verdict": debate.get("verdict"),
-                "debate_comment": debate.get("comment"),
-            }
-        )
+        base_result.update({
+            "sentiment_change": total_sentiment,
+            "debate_adjustment": debate.get("adjustment", 0.0),
+            "debate_verdict": debate.get("verdict"),
+            "debate_comment": debate.get("comment"),
+        })
         return base_result
 
     @staticmethod
@@ -227,9 +245,20 @@ class ArgumentAgent:
 
         # Try a direct JSON parse first.
         try:
-            return json.loads(content)
+            data = json.loads(content)
         except json.JSONDecodeError:
             pass
+        else:
+            # Support new schema: {"analysis": "...", "rebuttal_score": 0-1}
+            if "rebuttal_score" in data and "sentiment_change" not in data:
+                try:
+                    score = float(data["rebuttal_score"])
+                    data["sentiment_change"] = float(
+                        np.clip((score * 2) - 1, -1.0, 1.0)
+                    )
+                except Exception:
+                    data["sentiment_change"] = 0.0
+            return data
 
         # Fallback: extract JSON-like substring.
         start = content.find("{")
@@ -237,7 +266,16 @@ class ArgumentAgent:
         if start != -1 and end != -1 and end > start:
             snippet = content[start : end + 1]
             try:
-                return json.loads(snippet)
+                data = json.loads(snippet)
+                if "rebuttal_score" in data and "sentiment_change" not in data:
+                    try:
+                        score = float(data["rebuttal_score"])
+                        data["sentiment_change"] = float(
+                            np.clip((score * 2) - 1, -1.0, 1.0)
+                        )
+                    except Exception:
+                        data["sentiment_change"] = 0.0
+                return data
             except json.JSONDecodeError:
                 pass
         return {"resolved": False, "sentiment_change": 0.0}
@@ -284,8 +322,11 @@ class ArgumentAgent:
                 self.api_url, headers=headers, json=payload, timeout=60
             )
             response.raise_for_status()
-            content = response.json().get("choices", [{}])[0].get("message", {}).get(
-                "content", ""
+            content = (
+                response.json()
+                .get("choices", [{}])[0]
+                .get("message", {})
+                .get("content", "")
             )
             verdict = content.strip() if content else "UNKNOWN"
         except Exception:
